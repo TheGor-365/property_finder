@@ -19,6 +19,19 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# user account
+gem 'devise'
+
+# icons
+gem 'feathericon-rails'
+
+# image uploads to Amazon s3
+gem 'carrierwave', '0.10.0'
+gem 'fog-aws'
+
+# image resizing
+gem 'mini_magick'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
@@ -33,6 +46,7 @@ group :development do
   gem 'listen'
   gem 'spring'
   gem 'spring-watcher-listen'
+  gem 'figaro'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
