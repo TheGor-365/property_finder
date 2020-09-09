@@ -13,4 +13,10 @@
  *= require_tree .
  *= require_self
  *= require feathericon
+
  */
+
+@import 'bootstrap/scss/bootstrap';
+// @import '@fortawesome/fontawesome-free/css/all.css';
+@import "font-awesome-sprockets";
+@import "font-awesome";

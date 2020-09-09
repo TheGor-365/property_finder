@@ -24,6 +24,9 @@ gem 'devise'
 
 # icons
 gem 'feathericon-rails'
+# icons (fontawesome)
+# gem "font-awesome-rails"
+gem 'font-awesome-sass'
 
 # image uploads to Amazon s3
 gem 'carrierwave', '0.10.0'
