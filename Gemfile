@@ -28,6 +28,9 @@ gem 'feathericon-rails'
 # gem "font-awesome-rails"
 gem 'font-awesome-sass'
 
+# toastr
+gem 'toastr-rails'
+
 # image uploads to Amazon s3
 gem 'carrierwave', '0.10.0'
 gem 'fog-aws'
@@ -37,6 +40,12 @@ gem 'mini_magick'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+# google maps
+gem 'gmaps4rails'
+
+# geocoder google
+gem 'geocoder'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

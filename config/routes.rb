@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
-  get '/dashboard' => 'dashboard#index', as: :dashboard
 
-  resources :properties
   devise_for :accounts
+  resources :properties
+
+  get '/dashboard' => 'dashboard#index', as: :dashboard
+  get '/profile/:id' => 'dashboard#profile', as: :profile
+  post 'agent/message' => "properties#email_agent", as: :email_agent
+
   root to: 'public#main'
-  # devise_scope :account do
-  #   get 'sign_in', to: 'devise/sessions#new'
-  # end
+
 end
