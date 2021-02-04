@@ -3,9 +3,26 @@
 }
 
 body {
-  // padding-top: 56px;
+  padding-top: 56px;
 }
 
 .img-circle {
   border-radius: 50%;
+}
+
+#home-banner .jumbotron {
+  background: url('banners/home_2.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+#blog-banner .jumbotron {
+  background: url('banners/blog_2.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.main-banner .jumbotron {
+  h1, p {
+    color: #fff;
+    text-shadow: 1px 1px 4px #777;
+  }
 }

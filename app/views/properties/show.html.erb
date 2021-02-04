@@ -65,7 +65,7 @@
               The following are additional ways you can use Feather
             </p>
           <% end %>
-          
+
         </div>
       </div>
     </div>
@@ -74,7 +74,8 @@
       <%= render 'properties/agent_details' %>
 
       <iframe class="ml-lg-4 mt-3"
-        src="src=https://www.google.com/maps/embed/v1/place?/&key=AIzaSyA2pBds4pXhu9EA3-Qoi5OPPYCbowENCNI&q=<%= @property.address.to_param %>" width="320"
+        src="src=https://www.google.com/maps/embed/v1/place?/&key=AIzaSyA2pBds4pXhu9EA3-Qoi5OPPYCbowENCNI&q=<%= @property.address.to_param %>"
+        width="320"
         height="240"
         frameborder="0"
         style="border:0"
@@ -96,4 +97,4 @@
   </div>
 </section>
 
-<%= render "properties/send_email_modal" %>
+<%= render "properties/send_email_modal", agent: @agent %>

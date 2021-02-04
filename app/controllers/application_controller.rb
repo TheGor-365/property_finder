@@ -4,7 +4,22 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :last_name, :telephone, :url, :image, :company, :image_cache])
+    @show_sidebar = true if account_signed_in?
+    devise_parameter_sanitizer.permit(
+      :account_update, keys: [
+        :first_name,
+        :last_name,
+        :telephone,
+        :url,
+        :image,
+        :image_cache,
+        :cover_image,
+        :cover_image_cache,
+        :company,
+        :image_cache,
+        :details
+      ]
+    )
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name])
   end
 end

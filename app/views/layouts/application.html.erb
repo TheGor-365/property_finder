@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>PropertyFinder</title>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -9,18 +10,18 @@
     <%= javascript_pack_tag 'application' %>
 
     <%= favicon_link_tag asset_path('favicon-16x16.png') %>
-
     <script src="https://unpkg.com/feather-icons"></script>
-
   </head>
 
   <body id="<%= controller.controller_name %>" class="<%= controller.action_name %> <%= "show_sidebar" if @show_sidebar.present? %>">
+
     <% if @show_sidebar.nil? %>
       <header>
         <%= render 'layouts/nav/public' %>
         <%= yield %>
       </header>
     <% else %>
+
       <%= render 'layouts/nav/dashboard' %>
 
       <div class="container-fluid">
@@ -36,6 +37,5 @@
     <%#= render 'layouts/footer' %>
 
     <div id="notifications"><%= flash_notifications %></div>
-
   </body>
 </html>

@@ -105,7 +105,8 @@ class PropertiesController < ApplicationController
         :parking_spaces,
         :details,
         :for_sale,
-        :available_date
+        :available_date,
+        :status
       )
     end
 end

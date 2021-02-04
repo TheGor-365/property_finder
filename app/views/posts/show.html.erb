@@ -1,0 +1,14 @@
+<main role="main">
+
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4"><%= @post.title %></h1>
+      <p class="text-muted pl-2">Posted <%= time_ago_in_words @post.created_at %></p>
+    </div>
+  </div>
+</main>
+<div class="container mt-5">
+    <%= image_tag @post.image.thumb.url, class: 'float-right mb-4 ml-4' if @post.image.present? %>
+    <%= simple_format @post.body %>
+    <p><%= link_to 'View latest blog posts', blog_path %></p>
+</div>
