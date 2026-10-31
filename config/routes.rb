@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  devise_for :accounts
+  devise_for :accounts, controllers: { registrations: "accounts/registrations" }
   resources :posts
   get '/my/properties', to: 'properties#mine', as: :my_properties
   resources :properties
