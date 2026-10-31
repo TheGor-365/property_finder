@@ -139,7 +139,30 @@ class AccountAuthenticationFlowTest < ActionDispatch::IntegrationTest
     refute account.valid_password?(PASSWORD)
     assert_nil account.reset_password_token
 
+    # Devise signs in automatically after a successful reset.
+    # Sign out before testing whether the old token can be reused.
     delete destroy_account_session_path
+    assert_response :redirect
+
+    get dashboard_path
+    assert_redirected_to new_account_session_path
+
+    password_digest = account.encrypted_password
+
+    patch account_password_path, params: {
+      account: {
+        reset_password_token: token,
+        password: "reused_token_password_789",
+        password_confirmation: "reused_token_password_789"
+      }
+    }
+
+    assert_includes [200, 422], response.status
+    assert_equal password_digest, account.reload.encrypted_password
+    assert_nil account.reset_password_token
+
+    get dashboard_path
+    assert_redirected_to new_account_session_path
 
     post account_session_path, params: {
       account: {
