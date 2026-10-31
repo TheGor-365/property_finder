@@ -54,6 +54,14 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Public domain used for password reset links.
+  # APP_HOST must contain a hostname, without https:// or a path.
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch("APP_HOST"),
+    protocol: "https"
+  }
+
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
