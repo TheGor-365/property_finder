@@ -21,7 +21,7 @@ gem 'jbuilder', '2.15.1'
 # gem 'bcrypt', '~> 3.1.7'
 
 # user account
-gem 'devise', '4.9.4'
+gem 'devise', '5.0.4'
 
 # icons
 gem 'feathericon-rails'
