@@ -1,0 +1,19 @@
+FROM node:12.22.12-buster AS node12
+
+FROM ruby:2.7.8-buster
+
+COPY --from=node12 /usr/local/bin/node /usr/local/bin/node
+COPY --from=node12 /opt/ /opt/
+
+RUN yarn_bin="$(find /opt -type f -path '*/bin/yarn' -print -quit)" \
+    && test -n "$yarn_bin" \
+    && printf '#!/bin/sh\nexec "%s" "$@"\n' "$yarn_bin" > /usr/local/bin/yarn \
+    && chmod +x /usr/local/bin/yarn
+
+RUN gem install bundler -v 2.1.4 --no-document \
+    && ruby -v \
+    && bundle -v \
+    && node -v \
+    && yarn -v
+
+WORKDIR /app
