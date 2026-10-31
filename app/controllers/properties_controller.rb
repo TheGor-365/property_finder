@@ -1,12 +1,17 @@
 class PropertiesController < ApplicationController
+  before_action :authenticate_account!, only: [:new, :create, :edit, :update, :destroy, :mine]
   before_action :set_property, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_account!, only: [:new, :create, :destroy]
-  before_action :set_sidebar, except: [:show]
+  before_action :authorize_property_owner!, only: [:edit, :update, :destroy]
+  before_action :set_sidebar, only: [:new, :create, :edit, :update, :destroy, :mine]
 
   # GET /properties
   # GET /properties.json
   def index
-    @properties = Property.all
+    @properties = Property.order(created_at: :desc)
+  end
+
+  def mine
+    @properties = current_account.properties.order(created_at: :desc)
   end
 
   # GET /properties/1
@@ -36,7 +41,7 @@ class PropertiesController < ApplicationController
         format.html { redirect_to @property, notice: 'Property was successfully created.' }
         format.json { render :show, status: :created, location: @property }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @property.errors, status: :unprocessable_entity }
       end
     end
@@ -50,7 +55,7 @@ class PropertiesController < ApplicationController
         format.html { redirect_to @property, notice: 'Property was successfully updated.' }
         format.json { render :show, status: :ok, location: @property }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @property.errors, status: :unprocessable_entity }
       end
     end
@@ -67,19 +72,34 @@ class PropertiesController < ApplicationController
   end
 
   def email_agent
-    # trigger send email
-    agent_id = params[:agent_id]
-    first_name = params[:first_name]
-    last_name = params[:last_name]
-    email = params[:email]
-    message = params[:message]
+    profile_id = request.path_parameters[:profile_id]
 
-    ContactMailer.email_agent( agent_id, first_name, last_name, email, message ).deliver_now
-
-    # responce to script
-    respond_to do |format|
-      format.json { head :no_content }
+    agent = if profile_id
+      Account.find_by(id: profile_id)
+    else
+      Property.includes(:account).find_by(id: params[:property_id])&.account
     end
+
+    return head :not_found unless agent
+
+    first_name = params[:first_name].to_s.strip
+    last_name = params[:last_name].to_s.strip
+    email = params[:email].to_s.strip
+    message = params[:message].to_s.strip
+
+    valid = first_name.present? && first_name.length <= 100 &&
+            last_name.present? && last_name.length <= 100 &&
+            email.length <= 254 &&
+            URI::MailTo::EMAIL_REGEXP.match?(email) &&
+            message.present? && message.length <= 5000
+
+    return head :unprocessable_entity unless valid
+
+    ContactMailer.email_agent(
+      agent, first_name, last_name, email, message
+    ).deliver_now
+
+    head :no_content
   end
 
   private
@@ -88,8 +108,12 @@ class PropertiesController < ApplicationController
       @property = Property.find(params[:id])
     end
 
+    def authorize_property_owner!
+      head :forbidden unless @property.account_id == current_account.id
+    end
+
     def set_sidebar
-      @show_sidebar = true
+      @show_sidebar = true if account_signed_in?
     end
 
     # Only allow a list of trusted parameters through.

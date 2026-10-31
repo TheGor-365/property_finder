@@ -1,7 +1,15 @@
 class DashboardController < ApplicationController
+  before_action :authenticate_account!, only: :index
   before_action :set_sidebar
 
   def index
+    properties = current_account.properties
+
+    @total_properties = properties.count
+    @for_sale_count = properties.for_sale.count
+    @for_rent_count = properties.for_rent.count
+    @completed_count = properties.sold.count + properties.leased.count
+    @recent_properties = properties.order(created_at: :desc).limit(10)
   end
 
   def profile

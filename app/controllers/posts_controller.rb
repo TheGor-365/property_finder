@@ -15,6 +15,7 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    return head :not_found unless @post.active? || current_account&.admin?
   end
 
   # GET /posts/new
@@ -67,7 +68,7 @@ class PostsController < ApplicationController
 
     def can_access?
       @show_sidebar = true
-      unless current_account.admin?
+      unless current_account&.admin?
         redirect_to root_url, flash: { danger: "You do not have access to view this page" }
       end
     end

@@ -36,19 +36,6 @@
           </div>
         </div>
       </div>
-      <div class="row border-top border-bottom pt-4 pb-4 mt-4 mb-4">
-
-        <div class="col-6">
-          <% if @property.for_sale? %>
-            <strong class="text-success"><%= link_to "Est. Mountly Repaments of #{ number_to_currency((@property.price - (@property.price * 0.1)) / 360, precision: 0) } *", "#", class: 'text-success' %></strong>
-          <% else %>
-            <strong>Availlable from <%= @property.available_date.strftime('%a') %>, <%= @property.available_date.day.ordinalize %> <%= @property.available_date.strftime('%b') %></strong>
-          <% end %>
-        </div>
-        <div class="col-6 text-right">
-          <strong class="text-success"><%= link_to "Can I afford this property?", "#", class: 'text-success' %> </strong>
-        </div>
-      </div>
       <div class="row">
         <div class="col">
           <p class="h3"><%= @property.name %></p>
@@ -59,12 +46,7 @@
           </div>
           <button class="btn btn-outline-info mt-3" id="toggleDetails">Show more</button>
 
-          <% if @property.for_sale %>
-            <p class="mb-5">
-              * At its core, Feather is a collection of SVG files. This means that you can use Feather icons in all the same ways you can use SVGs (e.g. img, background-image, inline, object, embed, iframe). Here's a helpful article detailing the many ways SVGs can be used on the web: SVG on the Web – Implementation Options
-              The following are additional ways you can use Feather
-            </p>
-          <% end %>
+
 
         </div>
       </div>
@@ -73,14 +55,7 @@
     <div class="col-md-4">
       <%= render 'properties/agent_details' %>
 
-      <iframe class="ml-lg-4 mt-3"
-        src="src=https://www.google.com/maps/embed/v1/place?/&key=AIzaSyA2pBds4pXhu9EA3-Qoi5OPPYCbowENCNI&q=<%= @property.address.to_param %>"
-        width="320"
-        height="240"
-        frameborder="0"
-        style="border:0"
-        allowfullscreen>
-      </iframe>
+
 
     </div>
   </div>
@@ -97,4 +72,4 @@
   </div>
 </section>
 
-<%= render "properties/send_email_modal", agent: @agent %>
+<%= render "properties/send_email_modal", agent: @agent, property: @property %>

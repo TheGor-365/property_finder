@@ -17,28 +17,49 @@ $(function(){
   });
 
   $('#send-message-to-agent').on('click', function(){
-    var agent_id = $("#agent_id").val(),
-    first_name = $("#message-first-name").val(),
-    last_name = $("#message-last-name").val(),
-    email = $("#message-email").val(),
-    message = $("#message-text").val();
+    var button = $(this);
+    if (button.prop('disabled')) return;
+
+    var feedback = $('#contact-feedback');
+
+    var data = {
+      property_id: $('#property_id').val(),
+      first_name: $('#message-first-name').val(),
+      last_name: $('#message-last-name').val(),
+      email: $('#message-email').val(),
+      message: $('#message-text').val()
+    };
+
+    button.prop('disabled', true);
+    feedback.text('Sending...');
 
     $.ajax({
-      url: "/agent/message",
-      method: "POST",
-      dataType: "json",
-      data: {
-        agent_id: agent_id,
-        first_name: first_name,
-        last_name: last_name,
-        email: email,
-        message: message
+      url: $('#email_agent').attr('action'),
+      method: 'POST',
+      dataType: 'json',
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       },
-      success: function(data){
-        $('#contact-modal form').remove();
-        $('#send-message-to-agent').remove();
-        $('#contact-modal .modal-body').html("<p>Your message has been sent successfully!</p>");
+      data: data
+    }).done(function(){
+      $('#contact-modal .modal-body').html(
+        '<p>Your message has been sent successfully!</p>'
+      );
+      button.remove();
+    }).fail(function(xhr){
+      var message;
+
+      if (xhr.status === 422) {
+        message = 'Please provide a valid name, email and message.';
+      } else if (xhr.status === 429) {
+        message = 'Too many requests. Please try again later.';
+      } else {
+        message = 'Unable to send your message. Please try again.';
       }
+
+      feedback.text(message);
+    }).always(function(){
+      button.prop('disabled', false);
     });
   });
 
