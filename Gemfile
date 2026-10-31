@@ -1,20 +1,20 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.8'
+ruby '3.4.12'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '7.1.6'
 gem 'sprockets-rails', '~> 3.5'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
-gem 'pg'
+gem 'pg', '1.6.3'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '5.4.4'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
@@ -33,7 +33,7 @@ gem 'font-awesome-sass'
 gem 'toastr-rails'
 
 # image uploads to Amazon s3
-gem 'carrierwave', '0.10.0'
+gem 'carrierwave', '3.1.4'
 gem 'fog-aws'
 
 # image resizing
@@ -66,3 +66,6 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'rack-attack', '6.7.0'
+
+# Required by legacy Geocoder on Ruby 3.4+
+gem 'csv'
