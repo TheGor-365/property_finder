@@ -1,36 +1,30 @@
 <% properties.each do |property| %>
-  <div class="col-4">
-    <div class="property border">
-
-        <div class="property-thumb" style="background-image: url(<%= property_thumbnail_url(property) %>)">
-          <%= link_to "", property_path(property) %>
+  <% property_title = property.name.presence || "Property ##{property.id}" %>
+  <div class="col-12 col-md-6 col-lg-4 mb-4">
+    <article class="card pf-property-card h-100">
+      <%= link_to property_path(property), class: 'pf-property-card-media' do %>
+        <%= image_tag property_thumbnail_url(property), class: 'card-img-top pf-property-card-image',
+            alt: "Photo of #{property_title}", loading: 'lazy' %>
+      <% end %>
+      <div class="card-body d-flex flex-column">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="badge badge-light border"><%= property.for_sale? ? 'For sale' : 'For rent' %></span>
+          <% if property.status.present? && property.status != 'available' %>
+            <span class="badge badge-secondary"><%= property.status.humanize %></span>
+          <% end %>
         </div>
-
-        <div class="property-summary p-3">
-          <h3 class="h5">
-            <%= link_to property.name, property_path(property), class: 'text-dark' %>
-          </h3>
-
-          <span class="mr-2">
-            <%= property.rooms %>
-            <i class="fas fa-bed text-muted ml-1"></i>
-          </span>
-
-          <span class="mr-2">
-            <%= property.bathrooms %>
-            <i class="fas fa-bath text-muted ml-1"></i>
-          </span>
-
-          <span class="mr-2">
-            <%= property.parking_spaces %>
-            <i class="fas fa-car text-muted ml-1"></i>
-          </span>
-
-          <p class="mt-2">
-            <%= property.address %>
-          </p>
+        <h3 class="h5 card-title mb-2"><%= link_to property_title, property_path(property), class: 'pf-card-title-link' %></h3>
+        <p class="text-muted small mb-3"><%= property.address.presence || 'Address not provided' %></p>
+        <p class="h5 font-weight-bold mb-3">
+          <%= property.price.to_i.positive? ? number_to_currency(property.price, precision: 0) : 'Price on request' %>
+          <% unless property.for_sale? %><small class="text-muted font-weight-normal">/ month</small><% end %>
+        </p>
+        <div class="pf-property-card-features mt-auto pt-3 border-top text-muted small">
+          <span class="mr-3"><i class="fas fa-bed mr-1" aria-hidden="true"></i><%= property.rooms || 0 %> beds</span>
+          <span class="mr-3"><i class="fas fa-bath mr-1" aria-hidden="true"></i><%= property.bathrooms || 0 %> baths</span>
+          <span><i class="fas fa-car mr-1" aria-hidden="true"></i><%= property.parking_spaces || 0 %> parking</span>
         </div>
-
-    </div>
+      </div>
+    </article>
   </div>
 <% end %>

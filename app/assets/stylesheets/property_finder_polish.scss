@@ -1,0 +1,68 @@
+/* Property Finder UI polish — local refinements, retains Bootstrap 4 and original palette. */
+.pf-site-nav .navbar-brand { letter-spacing: -.015em; }
+.pf-site-nav .nav-link { font-weight: 500; }
+.pf-site-nav .nav-link:focus-visible,
+.pf-site-nav .btn:focus-visible,
+.pf-home a:focus-visible { outline: 3px solid #79cfac; outline-offset: 3px; }
+.pf-nav-actions { padding: .75rem 0; }
+
+.pf-home-hero .jumbotron {
+  position: relative;
+  min-height: 420px;
+  padding: 4.5rem 0;
+  display: flex;
+  align-items: center;
+  background-position: center;
+  isolation: isolate;
+}
+.pf-home-hero .jumbotron::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(100deg, rgba(11, 28, 38, .82), rgba(11, 28, 38, .22));
+}
+.pf-home-hero .pf-home-hero-content { max-width: 660px; }
+.pf-home-hero .pf-eyebrow {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #ddf4e6;
+}
+.pf-home-hero .jumbotron p { color: #fff; }
+.pf-home-actions .btn { min-width: 170px; }
+.pf-home-section h2, .pf-home-steps h2 { font-weight: 700; letter-spacing: -.02em; }
+.pf-section-kicker {
+  color: #237a4a;
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+.pf-home-steps { background: #f5f8f6; }
+.pf-step { background: #fff; border: 1px solid #e4ebe7; border-radius: 12px; }
+.pf-step-number { color: #237a4a; font-size: 1.6rem; font-weight: 800; }
+.pf-empty-state { background: #f7faf8; border: 1px dashed #b9cfc2; border-radius: 12px; }
+.pf-property-card {
+  border: 1px solid #e4eae6;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(11, 36, 24, .05);
+  transition: box-shadow .18s ease, transform .18s ease;
+}
+.pf-property-card:hover { box-shadow: 0 12px 28px rgba(11, 36, 24, .1); transform: translateY(-2px); }
+.pf-property-card-media { display: block; overflow: hidden; background: #e7efea; }
+.pf-property-card-image { height: 220px; width: 100%; object-fit: cover; }
+.pf-card-title-link { color: #172d25; }
+.pf-card-title-link:hover { color: #237a4a; }
+.pf-property-card-features { line-height: 1.8; }
+@media (max-width: 767.98px) {
+  .pf-home-hero .jumbotron { min-height: 340px; padding: 3.5rem 0; }
+  .pf-home-hero h1 { font-size: 2.25rem; }
+  .pf-nav-actions { padding-top: .25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-property-card { transition: none; }
+  .pf-property-card:hover { transform: none; }
+}

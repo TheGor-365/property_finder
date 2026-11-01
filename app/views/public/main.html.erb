@@ -1,60 +1,98 @@
-<main role="main" class="main-banner" id="home-banner">
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-3">Search for your new home today</h1>
-      <p>Choose from hundreds of beautifull bungalows, apartments and condominiums</p>
-      <p><%= link_to 'View Latest Properties', properties_path, class: 'btn btn-success' %></p>
-    </div>
-  </div>
-
-  <section id="latest_properties" class="mb-5">
-    <div class="container">
-      <div class="row mb-4">
-        <div class="col">
-          <h3>Latest Properties</h3>
+<main role="main" class="main-banner pf-home" id="home-banner">
+  <section class="pf-home-hero" aria-labelledby="pf-home-title">
+    <div class="jumbotron jumbotron-fluid mb-0">
+      <div class="container py-4 py-md-5">
+        <div class="pf-home-hero-content">
+          <p class="pf-eyebrow mb-3">Property Finder</p>
+          <h1 id="pf-home-title" class="display-4 font-weight-bold mb-3">Find a place to call home</h1>
+          <p class="lead mb-4">Explore available properties, compare the essentials and connect with the listing agent.</p>
+          <div class="d-flex flex-wrap align-items-center pf-home-actions">
+            <%= link_to 'Browse properties', properties_path, class: 'btn btn-success btn-lg mr-3 mb-2' %>
+            <%= link_to 'Latest articles', blog_path, class: 'btn btn-outline-light btn-lg mb-2' %>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <%= render 'properties/list', properties: @properties %>
       </div>
     </div>
   </section>
 
-  <section id="latest_posts" class="mb-5">
+  <section id="latest_properties" class="pf-home-section py-5" aria-labelledby="pf-properties-heading">
     <div class="container">
-      <div class="row">
-        <div class="col">
-          <h3>Latest News</h3>
+      <div class="row align-items-end mb-4">
+        <div class="col-md-8">
+          <p class="pf-section-kicker mb-2">Explore</p>
+          <h2 id="pf-properties-heading" class="h2 mb-2">Latest available properties</h2>
+          <p class="text-muted mb-md-0">Browse newly listed homes and rentals.</p>
+        </div>
+        <div class="col-md-4 text-md-right mt-2 mt-md-0">
+          <%= link_to 'View all properties', properties_path, class: 'btn btn-outline-success' %>
         </div>
       </div>
+      <% if @pf_homepage_properties.any? %>
+        <div class="row">
+          <%= render 'properties/list', properties: @pf_homepage_properties %>
+        </div>
+      <% else %>
+        <div class="pf-empty-state text-center p-4 p-md-5">
+          <h3 class="h5">No available properties yet</h3>
+          <p class="text-muted mb-3">New listings will appear here when they are published.</p>
+          <%= link_to 'Explore the catalogue', properties_path, class: 'btn btn-outline-success' %>
+        </div>
+      <% end %>
+    </div>
+  </section>
 
+  <section class="pf-home-steps py-5" aria-labelledby="pf-steps-heading">
+    <div class="container">
+      <h2 id="pf-steps-heading" class="h3 mb-4">Find your next property in three steps</h2>
       <div class="row">
-        <%= render 'posts/list', posts: @posts %>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="pf-step h-100 p-4">
+            <span class="pf-step-number" aria-hidden="true">01</span>
+            <h3 class="h5 mt-3">Browse listings</h3>
+            <p class="text-muted mb-0">Discover the properties currently displayed in our catalogue.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="pf-step h-100 p-4">
+            <span class="pf-step-number" aria-hidden="true">02</span>
+            <h3 class="h5 mt-3">Review details</h3>
+            <p class="text-muted mb-0">See photos, prices, amenities and the listed agent.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pf-step h-100 p-4">
+            <span class="pf-step-number" aria-hidden="true">03</span>
+            <h3 class="h5 mt-3">Contact the agent</h3>
+            <p class="text-muted mb-0">Use the contact option on a property page to make an enquiry.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="container">
-    <!-- Example row of columns -->
-    <div class="row">
-      <div class="col-md-4">
-        <h2>Heading</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+  <section id="latest_posts" class="pf-home-section py-5" aria-labelledby="pf-posts-heading">
+    <div class="container">
+      <div class="row align-items-end mb-4">
+        <div class="col-md-8">
+          <p class="pf-section-kicker mb-2">Insights</p>
+          <h2 id="pf-posts-heading" class="h2 mb-2">Latest articles</h2>
+          <p class="text-muted mb-md-0">News and guidance from the Property Finder blog.</p>
+        </div>
+        <div class="col-md-4 text-md-right mt-2 mt-md-0">
+          <%= link_to 'Visit the blog', blog_path, class: 'btn btn-outline-success' %>
+        </div>
       </div>
-
-      <div class="col-md-4">
-        <h2>Heading</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
-      </div>
-
-      <div class="col-md-4">
-        <h2>Heading</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
-      </div>
+      <% if @pf_homepage_posts.any? %>
+        <div class="row">
+          <%= render 'posts/list', posts: @pf_homepage_posts %>
+        </div>
+      <% else %>
+        <div class="pf-empty-state text-center p-4 p-md-5">
+          <h3 class="h5">No articles published yet</h3>
+          <p class="text-muted mb-3">Check back when new articles are available.</p>
+          <%= link_to 'Browse properties instead', properties_path, class: 'btn btn-outline-success' %>
+        </div>
+      <% end %>
     </div>
-    <hr>
-  </div> <!-- /container -->
+  </section>
 </main>
