@@ -66,3 +66,18 @@
   .pf-property-card { transition: none; }
   .pf-property-card:hover { transform: none; }
 }
+
+/* Property Finder catalogue — uses the established dark/green Bootstrap 4 design. */
+.pf-catalog { min-height: calc(100vh - 160px); background: #fff; }
+.pf-catalog h1, .pf-catalog h2 { letter-spacing: -.02em; }
+.pf-catalog-filters { background: #f7faf8; border: 1px solid #e2ece5; border-radius: 12px; }
+.pf-catalog-filters .form-control { border-color: #cedbd2; min-height: 42px; }
+.pf-catalog-filters .form-control:focus { border-color: #237a4a; box-shadow: 0 0 0 .2rem rgba(40, 167, 69, .15); }
+.pf-catalog-filters label { color: #254039; }
+.pf-catalog .page-link { color: #237a4a; }
+.pf-catalog .page-item.active .page-link { background: #237a4a; border-color: #237a4a; color: #fff; }
+@media (max-width: 575.98px) {
+  .pf-catalog { padding-top: 1.5rem !important; }
+  .pf-catalog-filters { padding: 1rem !important; }
+  .pf-filter-actions .btn { flex: 1; }
+}

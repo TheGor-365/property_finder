@@ -7,6 +7,12 @@ class PropertiesController < ApplicationController
   # GET /properties
   # GET /properties.json
   def index
+    if request.format.html?
+      @show_sidebar = nil # Public catalogue even when owner is signed in
+      @catalog = PropertyCatalogQuery.new(params)
+      @properties = @catalog.records
+      return render :catalog
+    end
     @properties = Property.order(created_at: :desc)
   end
 

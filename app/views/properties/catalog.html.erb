@@ -1,0 +1,81 @@
+<main class="pf-catalog py-5" id="property-catalog">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div>
+        <p class="pf-section-kicker mb-2">Explore</p>
+        <h1 class="h2 font-weight-bold mb-2">Browse available properties</h1>
+        <p class="text-muted mb-0">Find a home or rental that suits your needs.</p>
+      </div>
+      <% if account_signed_in? %>
+        <%= link_to 'Add property', new_property_path, class: 'btn btn-success mt-3 mt-md-0' %>
+      <% end %>
+    </div>
+
+    <section class="pf-catalog-filters p-3 p-md-4 mb-4" aria-labelledby="pf-filter-title">
+      <h2 class="h5 mb-3" id="pf-filter-title">Search and filters</h2>
+      <%= form_tag properties_path, method: :get, class: 'pf-catalog-form' do %>
+        <div class="row">
+          <div class="col-12 col-lg-5 mb-3">
+            <%= label_tag :q, 'Address or property name', class: 'small font-weight-bold' %>
+            <%= text_field_tag :q, @catalog.q, class: 'form-control', maxlength: 120, placeholder: 'Search listings' %>
+          </div>
+          <div class="col-6 col-lg-3 mb-3">
+            <%= label_tag :transaction, 'Listing type', class: 'small font-weight-bold' %>
+            <%= select_tag :transaction, options_for_select([['All types', ''], ['For sale', 'sale'], ['For rent', 'rent']], @catalog.transaction), class: 'form-control' %>
+          </div>
+          <div class="col-6 col-lg-4 mb-3">
+            <%= label_tag :sort, 'Sort by', class: 'small font-weight-bold' %>
+            <%= select_tag :sort, options_for_select([['Newest first', 'newest'], ['Oldest first', 'oldest'], ['Price: low to high', 'price_asc'], ['Price: high to low', 'price_desc']], @catalog.sort), class: 'form-control' %>
+          </div>
+          <div class="col-6 col-lg-3 mb-3">
+            <%= label_tag :min_price, 'Minimum price', class: 'small font-weight-bold' %>
+            <%= number_field_tag :min_price, @catalog.min_price, class: 'form-control', min: 0, max: 1000000000, placeholder: 'Any' %>
+          </div>
+          <div class="col-6 col-lg-3 mb-3">
+            <%= label_tag :max_price, 'Maximum price', class: 'small font-weight-bold' %>
+            <%= number_field_tag :max_price, @catalog.max_price, class: 'form-control', min: 0, max: 1000000000, placeholder: 'Any' %>
+          </div>
+          <div class="col-6 col-lg-2 mb-3">
+            <%= label_tag :rooms, 'Min. bedrooms', class: 'small font-weight-bold' %>
+            <%= number_field_tag :rooms, @catalog.rooms, class: 'form-control', min: 1, max: 20, placeholder: 'Any' %>
+          </div>
+          <div class="col-12 col-lg-4 mb-3 d-flex align-items-end pf-filter-actions">
+            <%= submit_tag 'Show properties', name: nil, class: 'btn btn-success mr-2' %>
+            <%= link_to 'Reset', properties_path, class: 'btn btn-outline-secondary' %>
+          </div>
+        </div>
+      <% end %>
+    </section>
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h2 class="h5 mb-0">Results <span class="text-muted font-weight-normal">(<%= @catalog.total_count %>)</span></h2>
+      <p class="text-muted small mb-0">Page <%= @catalog.page %> of <%= @catalog.total_pages %></p>
+    </div>
+
+    <% if @properties.any? %>
+      <section class="row pf-catalog-results" aria-label="Available property listings">
+        <%= render 'properties/list', properties: @properties %>
+      </section>
+    <% else %>
+      <div class="pf-empty-state text-center p-4 p-md-5" role="status">
+        <h2 class="h5">No matching properties</h2>
+        <p class="text-muted">Try different filters or check back when new listings are published.</p>
+        <%= link_to 'Clear filters', properties_path, class: 'btn btn-outline-success' if @catalog.filters_applied? %>
+      </div>
+    <% end %>
+
+    <% if @catalog.total_pages > 1 %>
+      <nav class="pf-catalog-pagination mt-4" aria-label="Property results pagination">
+        <ul class="pagination justify-content-center flex-wrap">
+          <% if @catalog.previous_page %>
+            <li class="page-item"><%= link_to 'Previous', properties_path(@catalog.query_params.merge(page: @catalog.previous_page)), class: 'page-link', rel: 'prev' %></li>
+          <% end %>
+          <li class="page-item active" aria-current="page"><span class="page-link"><%= @catalog.page %> / <%= @catalog.total_pages %></span></li>
+          <% if @catalog.next_page %>
+            <li class="page-item"><%= link_to 'Next', properties_path(@catalog.query_params.merge(page: @catalog.next_page)), class: 'page-link', rel: 'next' %></li>
+          <% end %>
+        </ul>
+      </nav>
+    <% end %>
+  </div>
+</main>
