@@ -67,3 +67,6 @@ gem 'rack-attack', '6.7.0'
 
 # Required by legacy Geocoder on Ruby 3.4+
 gem 'csv'
+
+# Build browser JavaScript with esbuild and Sprockets.
+gem "jsbundling-rails", "~> 1.3"

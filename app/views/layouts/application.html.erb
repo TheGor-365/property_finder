@@ -7,7 +7,7 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_pack_tag 'application' %>
+    <%= javascript_include_tag 'application', defer: true %>
 
     <%= favicon_link_tag asset_path('favicon-16x16.png') %>
     <script src="https://unpkg.com/feather-icons"></script>
