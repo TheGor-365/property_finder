@@ -24,7 +24,7 @@ class PublicNavigationLayoutTest < ActionDispatch::IntegrationTest
       assert_select "header.pf-public-header.sticky-top", count: 1
       assert_select "header.pf-public-header nav.pf-site-nav:not(.fixed-top)", count: 1
       assert_select "nav.fixed-top", count: 0
-      assert_select "#flash-messages", count: 0, message: "An empty flash container must not create a blank bar below the navbar"
+      assert_select "#flash-messages", count: 0
     end
   end
 
