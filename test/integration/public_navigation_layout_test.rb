@@ -24,7 +24,18 @@ class PublicNavigationLayoutTest < ActionDispatch::IntegrationTest
       assert_select "header.pf-public-header.sticky-top", count: 1
       assert_select "header.pf-public-header nav.pf-site-nav:not(.fixed-top)", count: 1
       assert_select "nav.fixed-top", count: 0
+      assert_select "#flash-messages", count: 0, message: "An empty flash container must not create a blank bar below the navbar"
     end
+  end
+
+  test "successful login renders a visible notice without a permanent spacer" do
+    post account_session_path, params: {
+      account: { email: @agent.email, password: "samplePassword2026!" }
+    }
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+    assert_select "#flash-messages .alert-success", text: /Signed in successfully/
   end
 
   test "dashboard retains its separate sidebar layout" do
