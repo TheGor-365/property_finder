@@ -47,7 +47,7 @@
         </div>
         <div class="form-group">
           <%= form.label :status %>
-          <%= form.select :status, [['Available', 'available'], ['Sold', 'sold'], ['Leased', 'leased']], {}, class: 'form-control' %>
+          <%= form.select :status, [['Available', 'available'], ['Sold', 'sold'], ['Leased', 'leased']], {}, class: 'form-control', data: { listing_status: true } %>
           <p class="pf-field-help mt-1 mb-0">Only available listings accept new enquiries. Use Sold for a sale and Leased for a rental.</p>
         </div>
         <div class="form-group">
