@@ -36,6 +36,9 @@
         </section>
       </div>
       <aside class="col-lg-4">
+        <% if @agent_message&.errors&.any? %>
+          <div class="alert alert-danger" role="alert">Please review your message and open the contact form again.</div>
+        <% end %>
         <div class="pf-detail-agent-card">
           <%= render 'properties/profile_contact_details', agent: @account %>
         </div>

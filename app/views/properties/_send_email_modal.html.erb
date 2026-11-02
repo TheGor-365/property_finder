@@ -1,42 +1,55 @@
-<div class="modal fade" id="contact-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<% agent_message = @agent_message || AgentMessage.new(account: agent) %>
+<% invalid = agent_message.errors.any? %>
+<div class="modal fade" id="contact-modal" tabindex="-1" role="dialog"
+     aria-labelledby="profile-contact-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message for <%= agent.first_name %></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h2 class="h5 modal-title" id="profile-contact-title">Message <%= agent.full_name.presence || 'the agent' %></h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
-      <div class="modal-body">
-        <%= form_tag(property ? email_agent_path : profile_email_agent_path(agent), id: "email_agent") do %>
-            <%= hidden_field_tag :property_id, property.id if property %>
-
+      <%= form_with scope: :agent_message, url: profile_email_agent_path(agent), local: true do |form| %>
+        <div class="modal-body">
+          <% if invalid %>
+            <div class="alert alert-danger" role="alert">
+              <strong>Please check your message:</strong>
+              <ul class="mb-0"><% agent_message.errors.full_messages.each do |error| %><li><%= error %></li><% end %></ul>
+            </div>
+          <% end %>
           <div class="form-group">
-            <label for="message-first-name" class="col-form-label">First Name:</label>
-            <%= text_field_tag :first_name, nil, class: "form-control", id: "message-first-name" %>
+            <%= form.label :name, 'Your name' %>
+            <%= form.text_field :name, value: agent_message.name, class: 'form-control', required: true, maxlength: 120, autocomplete: 'name' %>
           </div>
-
           <div class="form-group">
-            <label for="message-last-name" class="col-form-label">Last Name:</label>
-            <%= text_field_tag :last_name, nil, class: "form-control", id: "message-last-name" %>
+            <%= form.label :email, 'Email address' %>
+            <%= form.email_field :email, value: agent_message.email, class: 'form-control', required: true, maxlength: 254, autocomplete: 'email' %>
           </div>
-
           <div class="form-group">
-            <label for="message-email" class="col-form-label">Email:</label>
-            <%= email_field_tag :email, nil, class: "form-control", id: "message-email" %>
+            <%= form.label :message, 'Your message' %>
+            <%= form.text_area :message, value: agent_message.message, class: 'form-control', rows: 5, required: true, minlength: 10, maxlength: 2000 %>
           </div>
-
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text" name="message" maxlength="5000" required></textarea>
+          <div class="pf-enquiry-honeypot" aria-hidden="true">
+            <%= form.label :website, 'Leave this field empty' %>
+            <%= form.text_field :website, value: '', tabindex: -1, autocomplete: 'off' %>
           </div>
-        <% end %>
-        <p id="contact-feedback" role="status" aria-live="polite"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" id="send-message-to-agent">Send message</button>
-      </div>
+          <p class="text-muted small mb-0">
+            Your message will be saved in the agent's private inbox. Email delivery is not guaranteed.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+          <%= form.submit 'Send message', class: 'btn btn-success' %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
+<% if invalid %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.jQuery && window.jQuery.fn.modal) {
+        window.jQuery('#contact-modal').modal('show');
+      }
+    });
+  </script>
+<% end %>

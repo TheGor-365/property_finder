@@ -3,17 +3,20 @@
     <div>
       <p class="pf-section-kicker mb-2">Agent workspace</p>
       <h1 class="h2 mb-1">Incoming enquiries</h1>
-      <p class="text-muted mb-0">Messages about your own listings, newest first.</p>
+      <p class="text-muted mb-0">Messages about your listings and agent profile, newest first.</p>
     </div>
     <%= link_to 'Browse properties', properties_path, class: 'btn btn-outline-success mt-2' %>
   </div>
 
-  <% if @enquiries.empty? %>
+  <% if @enquiries.empty? && @agent_messages.empty? %>
     <section class="pf-catalog-empty p-4" aria-label="Empty inbox">
       <h2 class="h5">No enquiries yet</h2>
       <p class="mb-0">Messages sent about your listings will appear here.</p>
     </section>
   <% else %>
+    <% if @enquiries.any? %>
+      <h2 class="h4 mb-3">Listing enquiries</h2>
+    <% end %>
     <div class="row">
       <% @enquiries.each do |enquiry| %>
         <div class="col-12 col-xl-6 mb-3">
@@ -36,5 +39,36 @@
         </div>
       <% end %>
     </div>
+    <% if @agent_messages.any? %>
+      <div class="row">
+    <% if @agent_messages.any? %>
+      <div class="col-12 mt-3 mb-3">
+        <h2 class="h4">Direct messages to your profile</h2>
+        <p class="text-muted">Visitors who contacted your agent profile directly.</p>
+      </div>
+      <% @agent_messages.each do |agent_message| %>
+        <div class="col-12 col-xl-6 mb-3">
+          <article class="pf-detail-panel h-100" id="agent-message-<%= agent_message.id %>">
+            <div class="d-flex justify-content-between align-items-start">
+              <h3 class="h5">Agent profile message</h3>
+              <span class="badge badge-secondary"><%= agent_message.status.titleize %></span>
+            </div>
+            <p><strong><%= agent_message.name %></strong> · <%= mail_to agent_message.email %></p>
+            <p class="text-muted small"><%= l(agent_message.created_at, format: :long) %></p>
+            <div class="pf-detail-description"><%= simple_format agent_message.message %></div>
+            <%= form_with scope: :agent_message, url: agent_message_path(agent_message), method: :patch, local: true do |form| %>
+              <div class="form-inline">
+                <%= form.label :status, 'Status', class: 'mr-2' %>
+                <%= form.select :status, AgentMessage::STATUSES.map { |s| [s.titleize, s] },
+                      { selected: agent_message.status }, class: 'form-control form-control-sm mr-2' %>
+                <%= form.submit 'Update', class: 'btn btn-success btn-sm mt-2 mt-sm-0' %>
+              </div>
+            <% end %>
+          </article>
+        </div>
+      <% end %>
+    <% end %>
+      </div>
+    <% end %>
   <% end %>
 </main>

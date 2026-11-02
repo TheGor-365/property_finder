@@ -90,33 +90,39 @@ class PropertiesController < ApplicationController
     end
   end
 
+  # Compatibility route for historical listing contact forms. Even this legacy
+  # endpoint now persists a validated Enquiry before attempting email delivery.
   def email_agent
-    profile_id = request.path_parameters[:profile_id]
-
-    agent = if profile_id
-      Account.find_by(id: profile_id)
-    else
-      Property.includes(:account).find_by(id: params[:property_id])&.account
-    end
-
-    return head :not_found unless agent
+    property = Property.find_by(id: params[:property_id])
+    return head :not_found unless property
 
     first_name = params[:first_name].to_s.strip
     last_name = params[:last_name].to_s.strip
-    email = params[:email].to_s.strip
-    message = params[:message].to_s.strip
+    if first_name.blank? || last_name.blank? ||
+        first_name.length > 100 || last_name.length > 100
+      return head :unprocessable_entity
+    end
 
-    valid = first_name.present? && first_name.length <= 100 &&
-            last_name.present? && last_name.length <= 100 &&
-            email.length <= 254 &&
-            URI::MailTo::EMAIL_REGEXP.match?(email) &&
-            message.present? && message.length <= 5000
+    return head :no_content if params[:website].present?
 
-    return head :unprocessable_entity unless valid
+    enquiry = property.enquiries.build(
+      name: "#{first_name} #{last_name}",
+      email: params[:email],
+      message: params[:message]
+    )
+    return head :unprocessable_entity unless enquiry.valid?
 
-    ContactMailer.email_agent(
-      agent, first_name, last_name, email, message
-    ).deliver_now
+    recent = Enquiry.where(property_id: property.id, email: enquiry.email)
+      .where("created_at >= ?", 1.hour.ago)
+    return head :too_many_requests if recent.count >= 3
+
+    return head :unprocessable_entity unless enquiry.save
+
+    begin
+      EnquiryMailer.with(enquiry_id: enquiry.id).new_enquiry.deliver_now
+    rescue StandardError => error
+      Rails.logger.error("Legacy enquiry notification failed (id=#{enquiry.id}, error=#{error.class})")
+    end
 
     head :no_content
   end

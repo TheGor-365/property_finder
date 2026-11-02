@@ -9,6 +9,7 @@ class Account < ApplicationRecord
   mount_uploader :cover_image, ProfilePictureUploader
 
   has_many :properties, dependent: :restrict_with_error
+  has_many :agent_messages, dependent: :restrict_with_error
 
   def full_name
     "#{first_name} #{last_name}"

@@ -15,7 +15,7 @@
 <div class="pf-workspace-notice d-flex flex-wrap align-items-center justify-content-between p-3 mb-4">
   <div>
     <strong>Incoming requests</strong>
-    <p class="text-muted mb-0"><%= pluralize(@new_enquiries_count, "new enquiry") %> waiting for review</p>
+    <p class="text-muted mb-0"><%= pluralize(@new_enquiries_count, "new message") %> waiting for review</p>
   </div>
   <%= link_to "Open inbox", enquiries_path, class: "btn btn-outline-success btn-sm mt-2 mt-sm-0" %>
 </div>
