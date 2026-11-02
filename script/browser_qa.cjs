@@ -50,9 +50,13 @@ const checkNoOverflow = async (page, label) => {
     const toggle = page.getByRole("button", { name: "Toggle navigation" });
     assert.equal(await toggle.isVisible(), true, "Mobile navigation toggle missing");
     await toggle.click();
-    await page.locator("#navbarsExampleDefault").waitFor({ state: "visible" });
+    await page.locator("#navbarsExampleDefault.show").waitFor({ state: "visible" });
     assert.equal(await page.locator("#navbarsExampleDefault").getByRole("link",
       { name: "Properties" }).isVisible(), true);
+    const expandedNavHeight = await page.locator("#navbarsExampleDefault")
+      .evaluate(element => element.getBoundingClientRect().height);
+    assert.ok(expandedNavHeight > 80,
+      `Navigation was not fully expanded: ${expandedNavHeight}px`);
     await capture(page, "01-mobile-navigation-open.png");
 
     await goto(page, "/properties");
@@ -67,6 +71,26 @@ const checkNoOverflow = async (page, label) => {
     await page.locator("#contact-modal").waitFor({ state: "visible" });
     await capture(page, "03-mobile-enquiry-modal.png");
     await page.locator('#contact-modal input[name="enquiry[name]"]').fill("Browser QA Visitor");
+
+    // Verify the server-side 422 and preserved fields in an actual browser,
+    // bypassing HTML5 validation only for this deliberate negative test.
+    await page.locator('#contact-modal input[name="enquiry[email]"]').fill("not-an-email");
+    await page.locator('#contact-modal textarea[name="enquiry[message]"]').fill("short");
+    await page.locator('form#email_agent').evaluate(form => { form.noValidate = true; });
+    const [invalidResponse] = await Promise.all([
+      page.waitForResponse(response => response.url().endsWith("/enquiries") &&
+        response.request().method() === "POST"),
+      page.locator("#contact-modal").getByRole("button", { name: "Send enquiry" }).click()
+    ]);
+    assert.equal(invalidResponse.status(), 422, "Invalid enquiry must return HTTP 422");
+    await page.locator("#contact-modal.show").waitFor({ state: "visible" });
+    assert.equal(await page.locator('#contact-modal input[name="enquiry[name]"]').inputValue(),
+      "Browser QA Visitor");
+    assert.equal(await page.locator('#contact-modal input[name="enquiry[email]"]').inputValue(),
+      "not-an-email");
+    assert.equal(await page.locator("#contact-modal .alert-danger").isVisible(), true);
+    await capture(page, "04-mobile-enquiry-validation.png");
+
     await page.locator('#contact-modal input[name="enquiry[email]"]').fill("browser-qa-visitor@example.invalid");
     await page.locator('#contact-modal textarea[name="enquiry[message]"]')
       .fill("I would like to arrange a demonstration viewing of this fictional home.");
@@ -83,7 +107,9 @@ const checkNoOverflow = async (page, label) => {
     await checkNoOverflow(page, "mobile workspace");
     const sidebarToggle = page.getByRole("button", { name: "Toggle navigation" });
     await sidebarToggle.click();
-    await page.locator("#sidebarMenu").waitFor({ state: "visible" });
+    await page.locator("#sidebarMenu.show").waitFor({ state: "visible" });
+    assert.equal(await page.locator("#sidebarMenu").getByRole("link",
+      { name: "Enquiries" }).isVisible(), true);
     await capture(page, "05-mobile-agent-workspace.png");
 
     await goto(page, "/enquiries");
@@ -118,6 +144,8 @@ const checkNoOverflow = async (page, label) => {
     console.log("BROWSER_QA=PASS");
     console.log("SCREENSHOTS=" + screenshots.length);
     console.log("MOBILE_NAVBAR_GAP_PX=" + gap);
+    console.log("MOBILE_NAV_EXPANDED_HEIGHT_PX=" + expandedNavHeight);
+    console.log("ENQUIRY_SERVER_VALIDATION_422=PASS");
     console.log("ENQUIRY_PERSISTENCE=PASS");
     console.log("AGENT_STATUS_RELOAD=PASS");
   } finally {
