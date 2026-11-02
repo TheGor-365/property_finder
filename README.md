@@ -37,6 +37,7 @@
 - `test/integration/` — HTTP, ownership, uploads, anti-abuse, navigation and presentation coverage
 - `docs/PORTFOLIO_CASE_RU.md` — Russian case study and scope
 - `docs/QA_UI_ACCEPTANCE_RU.md` — local browser QA checklist
+- `docs/BROWSER_QA_EVIDENCE_RU.md` — browser screenshot manifest and evidence boundaries
 - `docs/UPLOAD_STORAGE_PRODUCTION_RU.md` and `docs/RAILWAY_RELEASE_CHECKLIST_RU.md` — deployment gates, **not completed deployment reports**
 
 ## Local development (own PostgreSQL instance)
@@ -64,9 +65,10 @@ RAILS_ENV=test bin/rails test test
 
 ## Current acceptance evidence
 
-- GitHub Actions on the modernization branch: **95 Rails tests / 553 assertions / 0 failures / 0 errors / 0 skips** as of 2026-11-02.
+- GitHub Actions on the modernization branch: **98 Rails tests / 574 assertions / 0 failures / 0 errors / 0 skips** as of 2026-11-02.
 - Asset precompilation and production Docker build passed CI.
 - User browser screenshots confirmed the agent profile contact flow and corrected navbar layout.
+- [Chromium Browser QA](https://github.com/TheGor-365/property_finder/actions/runs/41528093906) verified 390px mobile and 1440px desktop layouts, fully expanded menus, 422 form recovery, persisted enquiry and status after reload, producing **12 browser screenshots**. The artifact has limited GitHub retention; a copy is preserved in the owner's private Drive (see [screenshot manifest](docs/BROWSER_QA_EVIDENCE_RU.md)).
 - Separate Railway project resources are **staged, not deployed**; there is **no confirmed public Property Finder URL**, no working production SMTP and no completed restore/redeploy persistence test.
 - Historical key exposure and production-grade distributed abuse protection still require release review.
 

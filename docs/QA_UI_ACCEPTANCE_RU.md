@@ -64,4 +64,4 @@ python3 "$(xdg-user-dir DOWNLOAD)/property_finder_start_ui.py"
 - Developer Tools: нет JS errors, незагруженных изображений, HTTP 500 или публичных личных данных.
 - После теста: `tmp/pf-ruby34-rails.sh pf:demo:revoke_access`. Это только ротация тестового пароля, сохранённые заявки/объявления не удаляются.
 
-CI проверяет код и сборку, **не** визуальную приёмку. До подтверждения всех пунктов PR остаётся draft; `master` не изменяется.
+CI включает **Chromium Browser QA** в изолированной базе: 390/1440 px, меню, отсутствие переполнения, Enquiry, HTTP 422, inbox и статус после reload; 12 скриншотов зафиксированы в [BROWSER_QA_EVIDENCE_RU.md](BROWSER_QA_EVIDENCE_RU.md). Это **не** полная кроссбраузерная, клавиатурная или production-приёмка. Остальные пункты остаются открытыми; PR draft, `master` без изменений.
