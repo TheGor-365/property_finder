@@ -172,3 +172,11 @@ body.show_sidebar { background: #f6f8f6; }
 .pf-agent-cover-content { color:#fff; padding-top:4rem; padding-bottom:2.3rem; }
 .pf-agent-cover-content h1 { font-size:clamp(2rem,4vw,3.4rem); letter-spacing:-.035em; }
 .pf-agent-cover-content .pf-eyebrow { color:#caf4d5; text-transform:uppercase; letter-spacing:.15em; font-weight:700; font-size:.76rem; }
+
+/* Public footer: useful navigation and unambiguous demo disclosure. */
+.pf-site-footer { background:#152e27; color:#cbded3; }
+.pf-site-footer .h5 { color:#fff; }
+.pf-site-footer a { color:#d5eadd; text-decoration:none; }
+.pf-site-footer a:hover, .pf-site-footer a:focus { color:#fff; text-decoration:underline; }
+.pf-site-footer .pf-footer-disclosure { max-width:630px; line-height:1.75; }
+.pf-footer-bottom { border-top:1px solid rgba(255,255,255,.18); font-size:.78rem; display:flex; flex-wrap:wrap; gap:.5rem 2rem; justify-content:space-between; }

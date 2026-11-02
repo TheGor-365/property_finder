@@ -1,3 +1,28 @@
-<footer class="container">
-  <p>&copy; Property Finder 2020</p>
+<footer class="pf-site-footer" role="contentinfo">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-md-7 mb-4 mb-md-0">
+        <p class="h5 font-weight-bold mb-2">Property Finder</p>
+        <p class="mb-2">A Ruby on Rails portfolio demonstration for browsing listings and managing agent enquiries.</p>
+        <p class="small pf-footer-disclosure mb-0">All listings marked DEMO are fictional examples. Addresses, prices and illustrative media are not verified real estate offers. No booking or payment service is offered.</p>
+      </div>
+      <nav class="col-md-4 offset-md-1" aria-label="Footer navigation">
+        <p class="small font-weight-bold text-uppercase mb-3">Explore</p>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-2"><%= link_to 'Home', root_path %></li>
+          <li class="mb-2"><%= link_to 'Browse listings', properties_path %></li>
+          <li class="mb-2"><%= link_to 'Read the journal', blog_path %></li>
+          <% if account_signed_in? %>
+            <li><%= link_to 'Your dashboard', dashboard_path %></li>
+          <% else %>
+            <li><%= link_to 'Agent sign in', new_account_session_path %></li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+    <div class="pf-footer-bottom mt-4 pt-3">
+      <span>© <%= Time.current.year %> Property Finder · Demo project</span>
+      <span>Not a real estate brokerage</span>
+    </div>
+  </div>
 </footer>
