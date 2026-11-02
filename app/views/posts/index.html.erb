@@ -21,7 +21,10 @@
               <td><%= l(post.updated_at.to_date, format: :long) %></td>
               <td>
                 <%= link_to 'View', post_path(post), class: 'btn btn-outline-secondary btn-sm mr-1' %>
-                <%= link_to 'Edit', edit_post_path(post), class: 'btn btn-outline-success btn-sm' %>
+                <%= link_to 'Edit', edit_post_path(post), class: 'btn btn-outline-success btn-sm mr-1' %>
+                <%= button_to 'Delete', post_path(post), method: :delete,
+                    data: { confirm: 'Permanently delete this article?' },
+                    class: 'btn btn-outline-danger btn-sm mt-2' %>
               </td>
             </tr>
           <% end %>
