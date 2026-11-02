@@ -1,0 +1,20 @@
+#!/bin/sh
+# Fail closed: never start a public application with missing credentials or
+# media on a disposable root filesystem. Never print secret values.
+set -eu
+for key in DATABASE_URL APP_HOST SECRET_KEY_BASE PROPERTY_FINDER_MAIL_FROM SMTP_ADDRESS SMTP_USERNAME SMTP_PASSWORD RAILWAY_VOLUME_MOUNT_PATH; do
+  eval "value=\${$key:-}"
+  if [ -z "$value" ]; then
+    printf 'STARTUP_BLOCKED: missing required variable %s\n' "$key" >&2
+    exit 78
+  fi
+done
+if [ "$RAILWAY_VOLUME_MOUNT_PATH" != "/app/public/uploads" ]; then
+  echo "STARTUP_BLOCKED: uploads volume must be mounted at /app/public/uploads" >&2
+  exit 78
+fi
+if [ ! -d "/app/public/uploads" ] || [ ! -w "/app/public/uploads" ]; then
+  echo "STARTUP_BLOCKED: uploads volume path is unavailable or not writable" >&2
+  exit 78
+fi
+exec "$@"

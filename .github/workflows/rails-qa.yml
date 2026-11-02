@@ -71,3 +71,17 @@ jobs:
           bundle exec rails runner 'abort "Expected 6 DEMO articles" unless Post.where("url LIKE ?", "pf-demo-%").count == 6'
       - name: Precompile assets
         run: bundle exec rails assets:precompile
+
+  production_image:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build production Docker image without secrets
+        run: docker build --file Dockerfile --tag property-finder:release-check .
+      - name: Missing production configuration must refuse startup
+        run: |
+          result=0
+          docker run --rm property-finder:release-check 2>&1 > /tmp/pf-release-guard.log || result=$?
+          test "$result" -eq 78
+          grep -q 'STARTUP_BLOCKED: missing required variable DATABASE_URL' /tmp/pf-release-guard.log

@@ -20,7 +20,8 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  # Serve compiled assets and /uploads through Rails in the single-service setup.
+  config.public_file_server.enabled = true
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
@@ -36,11 +37,11 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+  config.log_level = :info
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -53,6 +54,18 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "property_finder_production"
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV["SMTP_ADDRESS"],
+    port: ENV.fetch("SMTP_PORT", "587").to_i,
+    domain: ENV["APP_HOST"],
+    user_name: ENV["SMTP_USERNAME"],
+    password: ENV["SMTP_PASSWORD"],
+    authentication: :plain,
+    enable_starttls_auto: true,
+    openssl_verify_mode: "peer"
+  }
 
   # Public domain used for password reset links.
   # APP_HOST must contain a hostname, without https:// or a path.
