@@ -1,40 +1,37 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="h3">My Properties</h1>
-  <%= link_to "New Property", new_property_path, class: "btn btn-success" %>
-</div>
-
-<% if @properties.empty? %>
-  <p>You have no properties yet.</p>
-<% else %>
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Price</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @properties.each do |property| %>
-          <tr>
-            <td><%= property.name %></td>
-            <td><%= property.address %></td>
-            <td><%= property.price %></td>
-            <td><%= property.status %></td>
-            <td>
-              <%= link_to "Show", property_path(property) %>
-              <%= link_to "Edit", edit_property_path(property), class: "ml-2" %>
-              <%= link_to "Destroy", property_path(property),
-                    method: :delete,
-                    data: { confirm: "Delete this property?" },
-                    class: "ml-2 text-danger" %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+<section class="pf-workspace-section">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div><p class="pf-section-kicker mb-2">Agent workspace</p><h1 class="h2 mb-1">My properties</h1><p class="text-muted mb-0">Manage the listings owned by your account.</p></div>
+    <%= link_to 'Add a property', new_property_path, class: 'btn btn-success mt-2' %>
   </div>
-<% end %>
+  <% if @properties.empty? %>
+    <div class="pf-empty-state p-4 p-md-5">
+      <h2 class="h5">You have no listings yet</h2>
+      <p class="text-muted">Start with one accurately described property and add a photo you have permission to use.</p>
+      <%= link_to 'Create first listing', new_property_path, class: 'btn btn-success' %>
+    </div>
+  <% else %>
+    <div class="pf-workspace-card table-responsive">
+      <table class="table table-hover mb-0">
+        <thead><tr><th>Property</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% @properties.each do |property| %>
+            <tr>
+              <td><strong><%= property.name %></strong><div class="small text-muted"><%= property.address %></div></td>
+              <td><%= number_to_currency(property.price, precision: 0) %><% unless property.for_sale? %><div class="small text-muted">per month</div><% end %></td>
+              <td><span class="badge <%= property.status == 'available' ? 'badge-success' : 'badge-secondary' %>"><%= property.status.to_s.humanize %></span></td>
+              <td>
+                <div class="d-flex flex-wrap align-items-center">
+                  <%= link_to 'View', property_path(property), class: 'btn btn-outline-secondary btn-sm mr-2 my-1' %>
+                  <%= link_to 'Edit', edit_property_path(property), class: 'btn btn-outline-success btn-sm mr-2 my-1' %>
+                  <%= button_to 'Delete', property_path(property), method: :delete,
+                        data: { confirm: 'Delete this listing permanently?' },
+                        class: 'btn btn-outline-danger btn-sm my-1' %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</section>

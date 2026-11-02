@@ -8,12 +8,7 @@ $(function(){
   $('#toggleDetails').on('click', function(){
     var details = $('#prop-details');
     details.toggleClass('open');
-
-    if (details.toggleClass('open')){
-      $(this).text('Show less');
-    } else {
-      $(this).text('Show more');
-    }
+    $(this).text(details.hasClass('open') ? 'Show less' : 'Show more');
   });
 
   $('#send-message-to-agent').on('click', function(){

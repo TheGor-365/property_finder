@@ -1,18 +1,26 @@
-<h2>Accounts</h2>
-
-<% @accounts.each do |account| %>
-  <div class="row">
-    <div class="col-sm-3">
-      <%= account.full_name %>
-    </div>
-    <div class="col-sm-3">
-      <%= account.email %>
-    </div>
-    <div class="col-sm-3">
-      <%= account.created_at.strftime("%d %m %Y") %>
-    </div>
-    <div class="col-sm-3">
-      <%= link_to 'View profile', profile_path(account) %>
-    </div>
+<section class="pf-workspace-section">
+  <div class="mb-4">
+    <p class="pf-section-kicker mb-2">Administration</p>
+    <h1 class="h2 mb-1">Agent accounts</h1>
+    <p class="text-muted mb-0">Registered accounts and public agent profiles. Only administrators can view this page.</p>
   </div>
-<% end %>
+  <% if @accounts.empty? %>
+    <div class="pf-empty-state p-4"><p class="mb-0">No agent accounts found.</p></div>
+  <% else %>
+    <div class="pf-workspace-card table-responsive">
+      <table class="table table-hover mb-0">
+        <thead><tr><th>Agent</th><th>Email</th><th>Joined</th><th>Profile</th></tr></thead>
+        <tbody>
+          <% @accounts.order(created_at: :desc).each do |account| %>
+            <tr>
+              <td><%= account.full_name.presence || 'Name not provided' %></td>
+              <td><%= mail_to account.email %></td>
+              <td><%= l(account.created_at.to_date, format: :long) %></td>
+              <td><%= link_to 'View profile', profile_path(account), class: 'btn btn-outline-success btn-sm' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</section>

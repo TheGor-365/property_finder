@@ -1,66 +1,58 @@
-<div class="property-main-photo" style="background-image:url('<%= cover_image_url @account %>')">
-  <div class="photo-overlay">
-
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <div class="row">
-        <div class="col">
-          <p class="h4 mb-2"><%= @account.full_name %></p>
-          <p class="mb-2"><%= @account.company %></p>
-          <p class="text-muted">Registered for <%= time_ago_in_words @account.created_at %></p>
-        </div>
-      </div>
-      <div class="row border-top mt-5 pt-4">
-        <div class="col">
-          <p class="h5">Description</p>
-
-          <div id="prop_details">
-            <%= simple_format @account.details %>
-          </div>
-
-          <button class="btn btn-outline-info mt-3" id="toggleDetails">Show more</button>
-        </div>
-      </div>
+<main class="pf-agent-profile pb-5" role="main">
+  <header class="pf-agent-cover">
+    <%= image_tag cover_image_url(@account), alt: (@account.cover_image.present? ? "Agent profile cover" : "Architectural illustration"), class: 'pf-agent-cover-image' %>
+    <div class="pf-agent-cover-shade"></div>
+    <div class="container pf-agent-cover-content">
+      <p class="pf-eyebrow mb-2">Property Finder · Agent profile</p>
+      <h1 class="font-weight-bold mb-2"><%= @account.full_name.presence || 'Listing agent' %></h1>
+      <% if @account.company.present? %><p class="lead mb-0"><%= @account.company %></p><% end %>
     </div>
-
-    <div class="col-md-4">
-      <%= render 'properties/profile_contact_details', agent: @account %>
-
-        <div class="col-md-10 offset-md-1 text-center">
-          <div class="row mt-sm-3 bg-light p-3">
-            <div class="col-6">
-              <p class="lead"><%= @properties_sold %><br> Sold</p>
-            </div>
-            <div class="col-6">
-              <p class="lead"><%= @properties_for_sale %><br> For Sale</p>
-            </div>
-            <div class="col-6">
-              <p class="lead"><%= @properties_leased %><br> Leased</p>
-            </div>
-            <div class="col-6">
-              <p class="lead"><%= @properties_for_rent %><br> For Rent</p>
-            </div>
-          </div>
-        </div>
-
-    </div>
-  </div>
-</div>
-
-<section class="mb-5 mt-5">
-  <div class="container">
+  </header>
+  <div class="container py-5">
     <div class="row">
-      <div class="col-12">
-        <p class="h3 mb-3">Current listings by this agent</p>
+      <div class="col-lg-8 mb-4">
+        <section class="pf-detail-panel mb-4">
+          <p class="pf-section-kicker mb-2">Meet your agent</p>
+          <h2 class="h4 mb-3">About the agent</h2>
+          <% if @account.details.present? %>
+            <div class="pf-detail-description"><%= simple_format(@account.details) %></div>
+          <% else %>
+            <p class="text-muted mb-0">The agent has not published a profile introduction yet.</p>
+          <% end %>
+          <p class="text-muted small mt-3 mb-0">Member since <%= l(@account.created_at.to_date, format: :long) %></p>
+        </section>
+        <section class="pf-detail-panel">
+          <h2 class="h4 mb-3">Listing overview</h2>
+          <div class="row text-center">
+            <% [['For sale', @properties_for_sale], ['For rent', @properties_for_rent],
+                ['Sold', @properties_sold], ['Leased', @properties_leased]].each do |label, value| %>
+              <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <strong class="h3 d-block"><%= value %></strong>
+                <span class="text-muted small"><%= label %></span>
+              </div>
+            <% end %>
+          </div>
+          <p class="text-muted small mt-3 mb-0">Counts reflect listing statuses in this account. They do not verify completed transactions.</p>
+        </section>
       </div>
-      <%= render 'properties/list', properties: @properties %>
+      <aside class="col-lg-4">
+        <div class="pf-detail-agent-card">
+          <%= render 'properties/profile_contact_details', agent: @account %>
+        </div>
+        <p class="pf-detail-note mt-3">Confirm any property details directly with the listing agent. This portfolio environment may include fictional DEMO listings.</p>
+      </aside>
     </div>
+    <section class="pf-detail-related mt-4" aria-labelledby="agent-available-heading">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div><p class="pf-section-kicker mb-2">Available</p><h2 class="h4 mb-1" id="agent-available-heading">Current listings by this agent</h2></div>
+        <%= link_to 'Browse catalogue', properties_path, class: 'btn btn-outline-success mt-2' %>
+      </div>
+      <% if @properties.any? %>
+        <div class="row"><%= render 'properties/list', properties: @properties %></div>
+      <% else %>
+        <div class="pf-empty-state p-4"><p class="mb-0">This agent currently has no available listings.</p></div>
+      <% end %>
+    </section>
   </div>
-</section>
-
-<%= render "properties/send_email_modal", agent: @account, property: nil %>
-<%= @account.full_name %>
+</main>
+<%= render 'properties/send_email_modal', agent: @account, property: nil %>

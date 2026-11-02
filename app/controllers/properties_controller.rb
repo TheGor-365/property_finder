@@ -75,10 +75,18 @@ class PropertiesController < ApplicationController
   # DELETE /properties/1
   # DELETE /properties/1.json
   def destroy
-    @property.destroy
-    respond_to do |format|
-      format.html { redirect_to properties_url, notice: 'Property was successfully destroyed.' }
-      format.json { head :no_content }
+    if @property.destroy
+      respond_to do |format|
+        format.html { redirect_to properties_url, notice: 'Property was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to my_properties_path,
+          alert: 'This listing cannot be deleted while it has associated enquiries.' }
+        format.json { render json: { errors: @property.errors.full_messages },
+          status: :unprocessable_entity }
+      end
     end
   end
 

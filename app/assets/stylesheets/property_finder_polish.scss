@@ -164,3 +164,11 @@ body.show_sidebar { background: #f6f8f6; }
 }
 
 .pf-illustration-note { font-size:.72rem; line-height:1.35; color:#5c6c63; }
+
+/* Agent profile: no JS-only toggle or full-page blank cover placeholders. */
+.pf-agent-cover { position:relative; min-height:295px; isolation:isolate; overflow:hidden; display:flex; align-items:end; }
+.pf-agent-cover-image { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; }
+.pf-agent-cover-shade { position:absolute; inset:0; z-index:-1; background:linear-gradient(85deg,rgba(8,30,24,.91),rgba(8,30,24,.32)); }
+.pf-agent-cover-content { color:#fff; padding-top:4rem; padding-bottom:2.3rem; }
+.pf-agent-cover-content h1 { font-size:clamp(2rem,4vw,3.4rem); letter-spacing:-.035em; }
+.pf-agent-cover-content .pf-eyebrow { color:#caf4d5; text-transform:uppercase; letter-spacing:.15em; font-weight:700; font-size:.76rem; }
