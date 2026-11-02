@@ -35,7 +35,12 @@ const checkNoOverflow = async (page, label) => {
   try {
     const mobile = await browser.newContext({
       viewport: { width: 390, height: 844 }, deviceScaleFactor: 1,
-      isMobile: true, hasTouch: true
+      isMobile: true, hasTouch: true,
+      // Browser-native video proof on fictional CI fixtures only.
+      recordVideo: {
+        dir: "tmp/browser_qa/video",
+        size: { width: 390, height: 844 }
+      }
     });
     const page = await mobile.newPage();
     page.on("pageerror", error => errors.push(error.message));
@@ -133,6 +138,9 @@ const checkNoOverflow = async (page, label) => {
     const persisted = page.locator('article[id^="enquiry-"]').filter({ hasText: "Browser QA Visitor" });
     assert.equal(await persisted.locator('select[name="enquiry[status]"]').inputValue(), "contacted");
     await capture(page, "06-mobile-agent-inbox.png");
+
+    // Explicitly close the recording context to flush the .webm file.
+    await mobile.close();
 
     const desktop = await browser.newContext({
       viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1

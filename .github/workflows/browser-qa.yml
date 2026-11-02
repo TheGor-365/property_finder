@@ -97,6 +97,14 @@ jobs:
           path: tmp/browser_qa/screenshots/*.png
           if-no-files-found: ignore
           retention-days: 14
+      - name: Upload raw fictional mobile QA video
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: property-finder-browser-qa-video
+          path: tmp/browser_qa/video/*.webm
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Stop QA server
         if: always()
         run: |
