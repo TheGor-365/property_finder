@@ -1,0 +1,113 @@
+name: Browser QA and Screenshots
+
+on:
+  push:
+    branches:
+      - work/property-finder-ui-content
+    paths:
+      - 'app/**'
+      - 'config/**'
+      - 'db/**'
+      - 'script/browser_qa*'
+      - '.github/workflows/browser-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RAILS_ENV: test
+      GITHUB_ACTIONS: "true"
+      PF_BROWSER_QA: "1"
+      PF_DEV_DB_PASSWORD: ci-property-finder-only
+      RAILS_MAX_THREADS: "5"
+      BUNDLE_WITHOUT: development
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: property_finder_test
+          POSTGRES_USER: first
+          POSTGRES_PASSWORD: ci-property-finder-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U first -d property_finder_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 8
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: System dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libpq-dev imagemagick
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4.12"
+          bundler: "2.6.9"
+          bundler-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+      - name: Install application JavaScript
+        run: |
+          npm install --global yarn@1.22.22
+          yarn install --frozen-lockfile
+      - name: Set up isolated browser dependencies
+        run: |
+          mkdir -p tmp/browser_qa
+          npm install --prefix tmp/browser_qa --no-save --no-package-lock playwright@1.56.0
+          npx --prefix tmp/browser_qa playwright install chromium --with-deps
+      - name: Prepare disposable test database and licensed demo copy
+        run: |
+          bundle exec rails db:prepare
+          bundle exec rails pf:demo:articles
+          bundle exec rails runner script/browser_qa_seed.rb
+      - name: Precompile test assets
+        run: bundle exec rails assets:precompile
+      - name: Start local test server and verify readiness
+        run: |
+          mkdir -p tmp/browser_qa
+          bundle exec rails server -b 127.0.0.1 -p 3000 > tmp/browser_qa/server.log 2>&1 &
+          echo $! > tmp/browser_qa/server.pid
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000/ >/dev/null; then
+              echo "BROWSER_QA_SERVER_READY=YES"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "BROWSER_QA_SERVER_READY=NO"
+          tail -n 45 tmp/browser_qa/server.log
+          exit 1
+      - name: Check mobile and desktop workflows in Chromium
+        run: node script/browser_qa.cjs
+      - name: Upload sanitized fictional demo screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: property-finder-browser-qa
+          path: tmp/browser_qa/screenshots/*.png
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload raw fictional mobile QA video
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: property-finder-browser-qa-video
+          path: tmp/browser_qa/video/*.webm
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Stop QA server
+        if: always()
+        run: |
+          if test -f tmp/browser_qa/server.pid; then
+            kill "$(cat tmp/browser_qa/server.pid)" || true
+          fi

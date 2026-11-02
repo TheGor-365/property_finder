@@ -1,6 +1,6 @@
-<h1>Editing Post</h1>
-
-<%= render 'form', post: @post %>
-
-<%= link_to 'Show', @post %> |
-<%= link_to 'Back', posts_path %>
+<div class="pf-editor-shell">
+  <p class="pf-section-kicker mb-2">Editorial workspace</p>
+  <h1 class="h2 mb-1">Edit article</h1>
+  <p class="text-muted mb-4"><%= @post.title %></p>
+  <%= render 'form', post: @post %>
+</div>

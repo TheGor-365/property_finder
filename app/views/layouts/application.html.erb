@@ -1,44 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>PropertyFinder</title>
-
+    <title><%= pf_page_title %></title>
+    <meta name="description" content="<%= pf_page_description %>">
+    <% if pf_private_page? %>
+      <meta name="robots" content="noindex,nofollow">
+    <% end %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_include_tag 'application', defer: true %>
-
     <%= favicon_link_tag asset_path('favicon-16x16.png') %>
     <script src="https://unpkg.com/feather-icons"></script>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-
-  <body id="<%= controller.controller_name %>" class="<%= controller.action_name %> <%= "show_sidebar" if @show_sidebar.present? %>">
-
+  <body id="<%= controller.controller_name %>" class="<%= controller.action_name %> <%= 'show_sidebar' if @show_sidebar.present? %>">
     <% if @show_sidebar.nil? %>
-      <header>
-        <%= render 'layouts/nav/public' %>
-        <%= render 'layouts/flash' %>
-        <%= yield %>
-      </header>
-    <% else %>
-
-      <%= render 'layouts/nav/dashboard' %>
+      <header class="pf-public-header sticky-top"><%= render 'layouts/nav/public' %></header>
       <%= render 'layouts/flash' %>
-
+      <%= yield %>
+      <%= render 'layouts/footer' %>
+    <% else %>
+      <%= render 'layouts/nav/dashboard' %>
       <div class="container-fluid">
         <div class="row">
           <%= render 'layouts/nav/sidebar' %>
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-5">
+          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-3 px-md-4 py-4 pf-workspace-main">
+            <%= render 'layouts/flash' %>
             <%= yield %>
           </main>
         </div>
       </div>
     <% end %>
-
-    <%#= render 'layouts/footer' %>
-
-
   </body>
 </html>

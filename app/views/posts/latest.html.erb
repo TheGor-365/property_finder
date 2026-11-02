@@ -1,31 +1,36 @@
-<main role="main" class="main-banner" id="blog-banner">
-
-  <div class="jumbotron">
+<main id="blog-banner" class="pf-blog" role="main">
+  <section class="pf-blog-hero py-5">
     <div class="container">
-      <h1 class="display-4">Latest Blog Posts</h1>
-      <p>Stay up to date with the latest porperty news at Property Finder</p>
-    </div>
-  </div>
-
-</main>
-
-<div class="container">
-
-  <% if @posts.empty? %>
-    <p>No posts to display</p>
-  <% else %>
-
-    <% @posts.each do |post| %>
-
-      <div class="row">
-        <div class="col">
-          <h2><%= post.title %></h2>
-          <p><%= post.summary %></p>
-          <%= link_to 'Read more', post_path(post), class: 'btn btn-success' %>
-          <hr>
+      <div class="row align-items-center">
+        <div class="col-lg-7 py-3">
+          <p class="pf-section-kicker mb-3">The Property Finder journal</p>
+          <h1 class="display-4 font-weight-bold mb-3">Good decisions start with better questions.</h1>
+          <p class="lead mb-4">Practical guides to comparing homes, preparing viewings and contacting an agent with confidence.</p>
+          <%= link_to 'Explore the catalogue', properties_path, class: 'btn btn-success btn-lg' %>
+        </div>
+        <div class="col-lg-5 d-none d-lg-block">
+          <%= image_tag 'editorial/living-room.svg', alt: 'Illustrated living room with architectural details', class: 'img-fluid pf-blog-hero-art' %>
         </div>
       </div>
-
+    </div>
+  </section>
+  <section class="container py-5" aria-labelledby="blog-articles-title">
+    <div class="d-flex flex-wrap align-items-end justify-content-between mb-4">
+      <div>
+        <p class="pf-section-kicker mb-2">Ideas and insights</p>
+        <h2 class="h2 mb-2" id="blog-articles-title">Latest articles</h2>
+        <p class="text-muted mb-0">Useful reading, without invented market statistics or sales promises.</p>
+      </div>
+      <span class="text-muted small"><%= pluralize(@posts.size, 'published article') %></span>
+    </div>
+    <% if @posts.any? %>
+      <div class="row"><%= render 'posts/list', posts: @posts %></div>
+    <% else %>
+      <div class="pf-empty-state p-4 p-md-5">
+        <h3 class="h5">Our editorial library is being prepared</h3>
+        <p class="text-muted mb-3">In the meantime, you can explore the available demo listings and their details.</p>
+        <%= link_to 'Browse properties', properties_path, class: 'btn btn-outline-success' %>
+      </div>
     <% end %>
-  <% end %>
-</div>
+  </section>
+</main>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_02_000500) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_02_000600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_02_000500) do
     t.string "cover_image"
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token", unique: true
+  end
+
+  create_table "agent_messages", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "name", limit: 120, null: false
+    t.string "email", limit: 254, null: false
+    t.text "message", null: false
+    t.string "status", limit: 20, default: "new", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "created_at"], name: "index_agent_messages_on_account_id_and_created_at"
+    t.index ["account_id"], name: "index_agent_messages_on_account_id"
   end
 
   create_table "enquiries", force: :cascade do |t|
@@ -85,5 +97,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_02_000500) do
     t.index ["account_id"], name: "index_properties_on_account_id"
   end
 
+  add_foreign_key "agent_messages", "accounts"
   add_foreign_key "enquiries", "properties"
 end

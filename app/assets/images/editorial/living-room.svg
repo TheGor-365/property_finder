@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-label="Original architectural editorial illustration">
+<defs><linearGradient id="sky" x2="1" y2="1"><stop stop-color="#cce6d9"/><stop offset="1" stop-color="#fbf8ed"/></linearGradient><linearGradient id="floor" x2="0" y2="1"><stop stop-color="#9ac6ab"/><stop offset="1" stop-color="#163b33"/></linearGradient></defs>
+<rect width="960" height="600" fill="url(#sky)"/><circle cx="790" cy="96" r="86" fill="#f5c995" opacity=".75"/>
+<path d="M0 390 320 250 630 380 960 232V600H0Z" fill="#9ac6ab" opacity=".47"/>
+<path d="M66 450V160L470 55l404 105v290" fill="none" stroke="#163b33" stroke-width="18" stroke-linejoin="round" opacity=".85"/>
+<path d="M102 170h736v260H102z" fill="#fbf8ed" opacity=".74"/><path d="M470 80v350M102 300h736" stroke="#163b33" stroke-width="13" opacity=".7"/>
+<path d="M0 448h960v152H0z" fill="url(#floor)"/><path d="M230 488h500l75 54H155z" fill="#fbf8ed" opacity=".6"/>
+<rect x="190" y="330" width="580" height="140" rx="26" fill="#163b33"/><rect x="216" y="307" width="220" height="110" rx="29" fill="#f5c995"/><rect x="524" y="307" width="220" height="110" rx="29" fill="#f5c995"/>
+<path d="M245 470v60m468-60v60" stroke="#163b33" stroke-width="24" stroke-linecap="round"/>
+<path d="M132 450q-55-85-10-162m20 162q50-95 10-190" stroke="#163b33" stroke-width="13" fill="none" opacity=".8"/>
+<circle cx="142" cy="240" r="36" fill="#9ac6ab"/><circle cx="95" cy="305" r="36" fill="#9ac6ab"/>
+<path d="M0 566h960" stroke="#fbf8ed" opacity=".6" stroke-width="8"/></svg>

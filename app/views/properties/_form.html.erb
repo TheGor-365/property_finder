@@ -1,69 +1,67 @@
 <%= form_with(model: property, local: true) do |form| %>
-
-  <%= render 'layouts/validation', item: @property %>
-
-  <div class="form-group">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :address %>
-    <%= form.text_field :address, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :price, "Total Price (for sale) / Mounthly Price (rental)" %>
-    <%= form.number_field :price, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :rooms %>
-    <%= form.number_field :rooms, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :bathrooms %>
-    <%= form.number_field :bathrooms, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :parking_spaces %>
-    <%= form.number_field :parking_spaces, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :for_sale %>
-    <%= form.select :for_sale, options_for_select({ "Yes" => true, "No" => false }, @property.for_sale), class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <% opts = @property.for_sale? ? { "Available" => "available", "Sold" => "sold" } : { "Available" => "available", "Leased" => "leased" }  %>
-    <%= form.label :status %>
-    <%= form.select :status, options_for_select(opts, @property.status), class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :available_date %>
-    <%= form.date_field :available_date, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :details %>
-    <%= form.text_area :details, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :photo %>
-    <%= form.file_field :photo, class: 'form-control' %>
-    <%= form.hidden_field :photo_cache %>
-  </div>
-
-  <% if @property.photo.present? %>
-    <%= image_tag @property.photo.thumb.url, class: 'mt-4 form-group' %>
-  <% end %>
-
-  <div class="form-group">
-    <%= form.submit 'Save Property', class: 'btn btn-success' %>
+  <%= render 'layouts/validation', item: property %>
+  <div class="row">
+    <div class="col-lg-8">
+      <section class="pf-workspace-card mb-4" aria-labelledby="editor-location-title">
+        <h2 class="h5 pf-editor-divider" id="editor-location-title">Listing essentials</h2>
+        <div class="form-group">
+          <%= form.label :name, 'Property title' %>
+          <%= form.text_field :name, class: 'form-control', maxlength: 150, required: true, placeholder: 'e.g. DEMO - Courtyard apartment' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :address, 'Address or demo location' %>
+          <%= form.text_field :address, class: 'form-control', maxlength: 255, required: true, placeholder: 'Street, area, city' %>
+          <p class="pf-field-help mt-1 mb-0">Do not publish a private residence address without permission.</p>
+        </div>
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <%= form.label :price, 'Price (USD)' %>
+            <%= form.number_field :price, class: 'form-control', min: 0, step: 1, required: true %>
+            <small class="pf-field-help">Total price for sale; monthly price for rent.</small>
+          </div>
+          <div class="col-md-6 form-group">
+            <%= form.label :available_date, 'Available from' %>
+            <%= form.date_field :available_date, class: 'form-control' %>
+          </div>
+        </div>
+      </section>
+      <section class="pf-workspace-card mb-4" aria-labelledby="editor-spec-title">
+        <h2 class="h5 pf-editor-divider" id="editor-spec-title">Spaces and description</h2>
+        <div class="row">
+          <div class="col-md-4 form-group"><%= form.label :rooms, 'Bedrooms' %><%= form.number_field :rooms, class: 'form-control', min: 0, step: 1 %></div>
+          <div class="col-md-4 form-group"><%= form.label :bathrooms, 'Bathrooms' %><%= form.number_field :bathrooms, class: 'form-control', min: 0, step: 1 %></div>
+          <div class="col-md-4 form-group"><%= form.label :parking_spaces, 'Parking spaces' %><%= form.number_field :parking_spaces, class: 'form-control', min: 0, step: 1 %></div>
+        </div>
+        <div class="form-group">
+          <%= form.label :details, 'Full description' %>
+          <%= form.text_area :details, class: 'form-control', rows: 7, placeholder: 'Describe the layout, amenities, transport and anything a visitor should know.' %>
+        </div>
+      </section>
+    </div>
+    <aside class="col-lg-4">
+      <div class="pf-workspace-card pf-editor-side mb-4">
+        <h2 class="h5 pf-editor-divider">Publication</h2>
+        <div class="form-group">
+          <%= form.label :for_sale, 'Listing type' %>
+          <%= form.select :for_sale, [['For sale', true], ['For rent', false]], {}, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :status %>
+          <%= form.select :status, [['Available', 'available'], ['Sold', 'sold'], ['Leased', 'leased']], {}, class: 'form-control', data: { listing_status: true } %>
+          <p class="pf-field-help mt-1 mb-0">Only available listings accept new enquiries. Use Sold for a sale and Leased for a rental.</p>
+        </div>
+        <div class="form-group">
+          <%= form.label :photo, 'Cover photo' %>
+          <%= form.file_field :photo, class: 'form-control-file', accept: 'image/jpeg,image/png' %>
+          <%= form.hidden_field :photo_cache %>
+          <p class="pf-field-help mt-1">Upload only images you own or have permission to use.</p>
+        </div>
+        <% if property.photo.present? %>
+          <%= image_tag property.photo.thumb.url, alt: 'Current property cover', class: 'img-fluid rounded mb-3' %>
+        <% end %>
+        <%= form.submit(property.persisted? ? 'Save changes' : 'Create listing', class: 'btn btn-success btn-block btn-lg') %>
+        <%= link_to 'Cancel', my_properties_path, class: 'btn btn-outline-secondary btn-block mt-2' %>
+      </div>
+    </aside>
   </div>
 <% end %>

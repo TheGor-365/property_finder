@@ -10,11 +10,14 @@ class DashboardController < ApplicationController
     @for_rent_count = properties.for_rent.count
     @completed_count = properties.sold.count + properties.leased.count
     @recent_properties = properties.order(created_at: :desc).limit(10)
+    @new_enquiries_count = Enquiry.joins(:property)
+      .where(properties: { account_id: current_account.id }, status: "new").count +
+      current_account.agent_messages.where(status: "new").count
   end
 
   def profile
     @account = Account.find(params[:id])
-    @properties = Property.where(account_id: @account.id)
+    @properties = Property.where(account_id: @account.id, status: 'available').order(created_at: :desc)
 
     @properties_sold      = Property.where(account_id: @account.id).sold.count
     @properties_for_sale  = Property.where(account_id: @account.id).for_sale.count

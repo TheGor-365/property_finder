@@ -1,85 +1,53 @@
-<div class="row">
-  <div class="col">
-    <h2 class="mb-4 h3">Edit <%= resource_name.to_s.humanize %></h2>
+<section class="pf-editor-shell">
+  <p class="pf-section-kicker mb-2">Account settings</p>
+  <h1 class="h2 mb-1">Your profile and security</h1>
+  <p class="text-muted mb-4">Keep your contact details up to date. The current password is required to save account changes.</p>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
-
-      <div class="form-group">
-        <%= f.label :first_name %><br />
-        <%= f.text_field :first_name, class: 'form-control' %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+    <div class="row">
+      <div class="col-lg-8">
+        <section class="pf-workspace-card mb-4">
+          <h2 class="h5 pf-editor-divider">Public agent information</h2>
+          <div class="row">
+            <div class="col-sm-6 form-group"><%= f.label :first_name %><%= f.text_field :first_name, class: 'form-control', autocomplete: 'given-name' %></div>
+            <div class="col-sm-6 form-group"><%= f.label :last_name %><%= f.text_field :last_name, class: 'form-control', autocomplete: 'family-name' %></div>
+          </div>
+          <div class="form-group"><%= f.label :company, 'Agency or company (optional)' %><%= f.text_field :company, class: 'form-control' %></div>
+          <div class="form-group"><%= f.label :telephone, 'Public contact phone (optional)' %><%= f.telephone_field :telephone, class: 'form-control', autocomplete: 'tel' %><p class="pf-field-help mt-1">Shown on your public profile only when provided.</p></div>
+          <div class="form-group"><%= f.label :details, 'Agent introduction' %><%= f.text_area :details, class: 'form-control', rows: 6, placeholder: 'Tell visitors about your areas of focus and how you work.' %></div>
+          <div class="row">
+            <div class="col-sm-6 form-group"><%= f.label :image, 'Profile image' %><%= f.file_field :image, class: 'form-control-file', accept: 'image/jpeg,image/png' %><%= f.hidden_field :image_cache %></div>
+            <div class="col-sm-6 form-group"><%= f.label :cover_image, 'Profile cover' %><%= f.file_field :cover_image, class: 'form-control-file', accept: 'image/jpeg,image/png' %><%= f.hidden_field :cover_image_cache %></div>
+          </div>
+          <p class="pf-field-help mb-0">Upload only photos you own or are licensed to publish (JPEG or PNG, up to 5 MB).</p>
+        </section>
+        <section class="pf-workspace-card mb-4">
+          <h2 class="h5 pf-editor-divider">Login details</h2>
+          <div class="form-group"><%= f.label :email %><%= f.email_field :email, autocomplete: 'email', class: 'form-control', required: true %></div>
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <p class="alert alert-info">Waiting for confirmation: <%= resource.unconfirmed_email %></p>
+          <% end %>
+          <div class="form-group"><%= f.label :password, 'New password (optional)' %><%= f.password_field :password, autocomplete: 'new-password', class: 'form-control' %><p class="pf-field-help mt-1">Leave blank to keep your current password.<% if @minimum_password_length %> Minimum <%= @minimum_password_length %> characters.<% end %></p></div>
+          <div class="form-group"><%= f.label :password_confirmation %><%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form-control' %></div>
+        </section>
       </div>
+      <aside class="col-lg-4">
+        <section class="pf-workspace-card pf-editor-side mb-4">
+          <h2 class="h5 pf-editor-divider">Save changes</h2>
+          <div class="form-group"><%= f.label :current_password %><%= f.password_field :current_password, autocomplete: 'current-password', class: 'form-control', required: true %><p class="pf-field-help mt-1">Confirm with your current password.</p></div>
+          <%= f.submit 'Update account', class: 'btn btn-success btn-lg btn-block' %>
+          <%= link_to 'Back to dashboard', dashboard_path, class: 'btn btn-outline-secondary btn-block mt-2' %>
+        </section>
+      </aside>
+    </div>
+  <% end %>
 
-      <div class="form-group">
-        <%= f.label :last_name %><br />
-        <%= f.text_field :last_name, class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autocomplete: "email", class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :telephone %><br />
-        <%= f.text_field :telephone, class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :company %><br />
-        <%= f.text_field :company, class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :details %><br />
-        <%= f.text_area :details, class: 'form-control' %>
-      </div>
-
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-      <% end %>
-
-      <div class="form-group">
-        <%= f.label :password %> <small><i class="text-muted">(leave blank if you don't want to change it)</i></small><br />
-        <%= f.password_field :password, autocomplete: "new-password", class: 'form-control' %>
-        <% if @minimum_password_length %>
-          <br />
-          <small><em class="text-muted mt-0"><%= @minimum_password_length %> characters minimum</em></small>
-        <% end %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :current_password %> <small><i class="text-muted">(we need your current password to confirm your changes)</i></small><br />
-        <%= f.password_field :current_password, autocomplete: "current-password", class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :image %>
-        <%= f.file_field :image, class: 'form-control' %>
-        <%= f.hidden_field :image_cache %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :cover_image %>
-        <%= f.file_field :cover_image, class: 'form-control' %>
-        <%= f.hidden_field :cover_image_cache %>
-      </div>
-
-      <div class="form-group">
-        <%= f.submit "Update", class: 'btn btn-success' %>
-      </div>
-    <% end %>
-
-    <hr class="mt-5 mb-5">
-
-    <h3>Cancel my account</h3>
-    <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-danger' %></p>
-
-    <%= link_to "Back", :back, class: 'text-reset mb-5' %>
-  </div>
-</div>
+  <section class="pf-workspace-card border-danger mb-5">
+    <h2 class="h5 text-danger mb-2">Delete this account</h2>
+    <p class="text-muted">Account deletion is permanent and may affect your published listings. Review any outstanding enquiries first.</p>
+    <%= button_to 'Delete my account', registration_path(resource_name),
+      method: :delete, data: { confirm: 'Permanently delete your account?' },
+      class: 'btn btn-outline-danger' %>
+  </section>
+</section>

@@ -2,8 +2,19 @@
   display: none;
 }
 
+/* Public navbar participates in normal layout flow. No fixed-height offset. */
 body {
-  padding-top: 56px;
+  padding-top: 0;
+}
+
+.pf-public-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.pf-public-header .pf-site-nav {
+  margin-bottom: 0;
 }
 
 .img-circle {

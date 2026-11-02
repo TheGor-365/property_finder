@@ -3,11 +3,12 @@
     <article class="card pf-property-card pf-article-card h-100">
       <%= link_to post_path(post), class: 'pf-property-card-media' do %>
         <%= image_tag post_thumbnail_url(post), class: 'card-img-top pf-property-card-image',
-            alt: "Article: #{post.title.presence || 'Untitled'}", loading: 'lazy' %>
+            alt: (post.image.present? ? "Article image for #{post.title}" : "Editorial illustration for #{post.title}"), loading: 'lazy' %>
       <% end %>
       <div class="card-body d-flex flex-column">
+        <p class="pf-section-kicker mb-2">Journal · <%= l(post.created_at.to_date, format: :short) %></p>
         <h3 class="h5 card-title mb-2"><%= link_to post.title.presence || 'Untitled article', post_path(post), class: 'pf-card-title-link' %></h3>
-        <p class="text-muted small mb-3"><%= truncate(post.summary.to_s, length: 140) %></p>
+        <p class="text-muted small mb-3"><%= truncate(post.summary.to_s, length: 155) %></p>
         <%= link_to 'Read article', post_path(post), class: 'mt-auto font-weight-bold text-success' %>
       </div>
     </article>

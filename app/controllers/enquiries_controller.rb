@@ -42,6 +42,7 @@ class EnquiriesController < ApplicationController
     @enquiries = Enquiry.joins(:property)
       .where(properties: { account_id: current_account.id })
       .includes(:property).order(created_at: :desc).limit(100)
+    @agent_messages = current_account.agent_messages.order(created_at: :desc).limit(100)
   end
 
   def update

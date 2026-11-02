@@ -2,6 +2,7 @@ require "test_helper"
 
 class EnquiryBusinessFlowTest < ActionDispatch::IntegrationTest
   setup do
+    Rack::Attack.cache.store.clear
     @agent = Account.create!(first_name: "Primary", last_name: "Agent",
       email: "enquiry-owner-#{SecureRandom.hex(6)}@example.test",
       password: "samplePassword2026!", password_confirmation: "samplePassword2026!")
@@ -14,6 +15,10 @@ class EnquiryBusinessFlowTest < ActionDispatch::IntegrationTest
     @attrs = { property_id: @property.id, name: "Visitor Name",
       email: "Visitor@Example.test", message: "I would like to arrange a viewing please." }
     ActionMailer::Base.deliveries.clear
+  end
+
+  teardown do
+    Rack::Attack.cache.store.clear
   end
 
   test "guest enquiry persists and notifies the correct agent" do

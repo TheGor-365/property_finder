@@ -1,24 +1,14 @@
 <div class="text-center">
-  <div class="mb-2">
-    <%= profile_picture agent %>
+  <div class="mb-3"><%= profile_picture agent %></div>
+  <h3 class="h5 mb-1"><%= agent.full_name.presence || 'Listing agent' %></h3>
+  <% if agent.company.present? %><p class="text-muted mb-3"><%= agent.company %></p><% end %>
+  <div class="d-flex flex-column">
+    <% if agent.telephone.present? %>
+      <%= link_to "Call agent", "tel:#{agent.telephone.to_s.gsub(/[^\d+]/, '')}", class: 'btn btn-outline-success btn-block mb-2' %>
+    <% end %>
+    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#contact-modal">
+      <i class="fas fa-envelope mr-2" aria-hidden="true"></i>Send a message
+    </button>
   </div>
-
-  <h3 class="h4 m-0"><%= agent.full_name %></h3>
-  <p><%= agent.company %></p>
-
-  <div class="row justify-content-md-center">
-    <div class="col-md-10">
-      <button class="btn btn-block btn-info text-uppercase mb-1" id="show-tel" data-telephone="<%= agent.telephone %>">
-        <i class="fas fa-phone mr-2"></i>
-        <span>Call</span>
-      </button>
-    </div>
-
-    <div class="col-md-10">
-      <button class="btn btn-block btn-success text-uppercase" data-toggle="modal" data-target="#contact-modal">
-        <i class="fas fa-envelope mr-2"></i>
-        <span>email</span>
-      </button>
-    </div>
-  </div>
+  <p class="text-muted small mt-3 mb-0">Messages are stored in the agent's private inbox. Email notifications are best-effort.</p>
 </div>

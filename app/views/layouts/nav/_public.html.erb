@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark pf-site-nav" aria-label="Main navigation">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark pf-site-nav" aria-label="Main navigation">
   <div class="container">
     <a class="navbar-brand" href="<%= root_path %>">Property Finder</a>
     <button
@@ -15,18 +15,18 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
 
-        <li class="nav-item active">
-          <%= link_to 'Home', root_path, class: 'nav-link' %>
+        <li class="nav-item <%= 'active' if current_page?(root_path) %>">
+          <%= link_to 'Home', root_path, class: 'nav-link', aria: { current: (current_page?(root_path) ? 'page' : nil) } %>
         </li>
 
-        <li class="nav-item">
-          <%= link_to 'Properties', properties_path, class: 'nav-link' %>
+        <li class="nav-item <%= 'active' if controller_name == 'properties' %>">
+          <%= link_to 'Properties', properties_path, class: 'nav-link', aria: { current: (controller_name == 'properties' ? 'page' : nil) } %>
         </li>
 
 
 
-        <li class="nav-item">
-          <%= link_to 'Blog', blog_path, class: 'nav-link' %>
+        <li class="nav-item <%= 'active' if controller_name == 'posts' %>">
+          <%= link_to 'Blog', blog_path, class: 'nav-link', aria: { current: (controller_name == 'posts' ? 'page' : nil) } %>
         </li>
         <% if account_signed_in? %>
           <li class="nav-item">

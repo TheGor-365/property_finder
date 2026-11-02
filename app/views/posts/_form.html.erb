@@ -1,52 +1,38 @@
 <%= form_with(model: post, local: true) do |form| %>
   <% if post.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
-
-      <ul>
-        <% post.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <div class="alert alert-danger" role="alert">
+      <strong>Please review these fields:</strong>
+      <ul class="mb-0"><% post.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
     </div>
   <% end %>
-
-  <div class="form-group">
-    <%= form.label :title %>
-    <%= form.text_field :title, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :url %>
-    <%= form.text_field :url, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :summary %>
-    <%= form.text_field :summary, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :body %>
-    <%= form.text_area :body, class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :image %>
-    <%= form.file_field :image, class: 'form-control' %>
-    <%= form.hidden_field :image_cache %>
-  </div>
-
-  <% if @post.image.present? %>
-    <%= image_tag @post.image.thumb.url, class: 'mt-4 form-group' %>
-  <% end %>
-
-  <div class="checkbox">
-    <%= form.label :active %><br>
-    <%= form.check_box :active, class: 'checkbox' %><br>
-  </div>
-
-  <div class="form-group mt-3">
-    <%= form.submit class: 'btn btn-primary' %>
+  <div class="row">
+    <div class="col-lg-8">
+      <section class="pf-workspace-card mb-4">
+        <h2 class="h5 pf-editor-divider">Article content</h2>
+        <div class="form-group"><%= form.label :title %><%= form.text_field :title, class: 'form-control', required: true, maxlength: 160, placeholder: 'Write a clear, specific headline' %></div>
+        <div class="form-group"><%= form.label :summary, 'Short introduction' %><%= form.text_area :summary, class: 'form-control', rows: 3, placeholder: 'What will readers learn?' %></div>
+        <div class="form-group"><%= form.label :body, 'Full article' %><%= form.text_area :body, class: 'form-control', rows: 15, required: true, placeholder: 'Write the full guide here. Use paragraphs for readability.' %></div>
+      </section>
+    </div>
+    <aside class="col-lg-4">
+      <section class="pf-workspace-card pf-editor-side mb-4">
+        <h2 class="h5 pf-editor-divider">Publishing</h2>
+        <div class="custom-control custom-switch mb-4">
+          <%= form.check_box :active, class: 'custom-control-input' %>
+          <%= form.label :active, 'Published publicly', class: 'custom-control-label' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :image, 'Cover image' %>
+          <%= form.file_field :image, class: 'form-control-file', accept: 'image/jpeg,image/png' %>
+          <%= form.hidden_field :image_cache %>
+          <p class="pf-field-help mt-2">Use original or licensed artwork. A designed illustration is used if no cover is uploaded.</p>
+        </div>
+        <% if post.image.present? %>
+          <%= image_tag post.image.thumb.url, class: 'img-fluid rounded mb-3', alt: 'Current article cover' %>
+        <% end %>
+        <%= form.submit(post.persisted? ? 'Save article' : 'Create article', class: 'btn btn-success btn-block btn-lg') %>
+        <%= link_to 'Cancel', posts_path, class: 'btn btn-outline-secondary btn-block mt-2' %>
+      </section>
+    </aside>
   </div>
 <% end %>

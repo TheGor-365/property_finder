@@ -1,14 +1,30 @@
-<main role="main">
-
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-4"><%= @post.title %></h1>
-      <p class="text-muted pl-2">Posted <%= time_ago_in_words @post.created_at %></p>
-    </div>
+<main class="pf-article-page pb-5" role="main">
+  <div class="container">
+    <nav aria-label="Breadcrumb" class="pt-4">
+      <ol class="breadcrumb bg-transparent px-0">
+        <li class="breadcrumb-item"><%= link_to 'Home', root_path %></li>
+        <li class="breadcrumb-item"><%= link_to 'Journal', blog_path %></li>
+        <li class="breadcrumb-item active" aria-current="page">Article</li>
+      </ol>
+    </nav>
+    <header class="pf-article-heading mx-auto py-3">
+      <p class="pf-section-kicker mb-3">Property Finder journal</p>
+      <h1 class="display-4 font-weight-bold mb-3"><%= @post.title %></h1>
+      <p class="lead text-muted"><%= @post.summary %></p>
+      <p class="small text-muted">Published <%= l(@post.created_at.to_date, format: :long) %></p>
+    </header>
+    <article class="pf-article-reading mx-auto">
+      <figure class="pf-article-cover mb-4">
+        <%= image_tag post_thumbnail_url(@post), class: 'img-fluid', alt: (@post.image.present? ? "Article image for #{@post.title}" : "Editorial illustration for #{@post.title}") %>
+      </figure>
+      <div class="pf-article-body"><%= simple_format @post.body %></div>
+      <% if @post.url.to_s.start_with?('pf-demo-') %>
+        <p class="pf-article-disclaimer">Educational demonstration article. No properties, transactions or market outcomes are implied by this content.</p>
+      <% end %>
+      <div class="border-top pt-4 mt-4 d-flex flex-wrap justify-content-between align-items-center">
+        <%= link_to 'Back to all articles', blog_path, class: 'btn btn-outline-success mb-2' %>
+        <%= link_to 'Browse demo listings', properties_path, class: 'btn btn-success mb-2' %>
+      </div>
+    </article>
   </div>
 </main>
-<div class="container mt-5">
-    <%= image_tag @post.image.thumb.url, class: 'float-right mb-4 ml-4' if @post.image.present? %>
-    <%= simple_format @post.body %>
-    <p><%= link_to 'View latest blog posts', blog_path %></p>
-</div>
