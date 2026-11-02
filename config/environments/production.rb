@@ -38,6 +38,12 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
+  # Railway terminates TLS at the proxy. Its internal HTTP health probe must
+  # receive 200 directly, not be redirected to an HTTPS URL.
+  config.assume_ssl = true
+  config.ssl_options = {
+    redirect: { exclude: -> request { request.path == "/healthz" } }
+  }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
