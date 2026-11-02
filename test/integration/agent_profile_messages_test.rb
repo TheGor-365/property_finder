@@ -119,6 +119,6 @@ class AgentProfileMessagesTest < ActionDispatch::IntegrationTest
     assert_response :no_content
     record = Enquiry.order(:id).last
     assert_equal listing.id, record.property_id
-    assert_equal @agent.email, ActionMailer::Base.deliveries.last.to
+    assert_equal [@agent.email], ActionMailer::Base.deliveries.last.to
   end
 end
