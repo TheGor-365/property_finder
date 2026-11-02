@@ -10,7 +10,7 @@ class PostsController < ApplicationController
   end
 
   def latest
-    @posts = Post.active
+    @posts = Post.active.latest
   end
 
   # GET /posts/1 or /posts/1.json

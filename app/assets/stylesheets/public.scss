@@ -2,8 +2,12 @@
   display: none;
 }
 
-body {
+body:not(.show_sidebar) {
   padding-top: 56px;
+}
+
+body.show_sidebar {
+  padding-top: 0;
 }
 
 .img-circle {

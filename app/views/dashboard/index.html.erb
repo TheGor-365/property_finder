@@ -1,3 +1,4 @@
+<p class="pf-section-kicker mb-2">Agent workspace</p>
 <div class="d-flex justify-content-between align-items-center mb-4">
   <div>
     <h1 class="h2 mb-1">Dashboard</h1>
@@ -9,6 +10,14 @@
   <%= link_to "Add Property",
       new_property_path,
       class: "btn btn-success" %>
+</div>
+
+<div class="pf-workspace-notice d-flex flex-wrap align-items-center justify-content-between p-3 mb-4">
+  <div>
+    <strong>Incoming requests</strong>
+    <p class="text-muted mb-0"><%= pluralize(@new_enquiries_count, "new enquiry") %> waiting for review</p>
+  </div>
+  <%= link_to "Open inbox", enquiries_path, class: "btn btn-outline-success btn-sm mt-2 mt-sm-0" %>
 </div>
 
 <div class="row">
