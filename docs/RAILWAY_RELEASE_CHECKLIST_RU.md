@@ -1,6 +1,6 @@
 # Property Finder — отдельный Railway production deployment
 
-Статус: **build/test preparation, не deploy**. Проект пока НЕ существует в текущем Railway workspace. Не трогать `mellow-stillness`, `gor-web-resume`, `classifieds-rails-project-65` и их базы/тома.
+Статус: **build/test preparation, не deploy**. Отдельный приватный Railway-проект `property-finder` создан (project ID `367956af-bb83-4a01-b093-f7342ca58a4a`, production environment `3bbabef4-5625-43b0-9796-1e03c4363ae7`). В нём пока 0 работающих сервисов и 0 томов. Не трогать `mellow-stillness`, `gor-web-resume`, `classifieds-rails-project-65` и их базы/тома.
 
 ## Входные условия
 - Отдельный Railway project **property-finder** и свой PostgreSQL instance. Никаких общих production DB с другими приложениями.
