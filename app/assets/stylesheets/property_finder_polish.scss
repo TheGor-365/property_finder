@@ -180,3 +180,30 @@ body.show_sidebar { background: #f6f8f6; }
 .pf-site-footer a:hover, .pf-site-footer a:focus { color:#fff; text-decoration:underline; }
 .pf-site-footer .pf-footer-disclosure { max-width:630px; line-height:1.75; }
 .pf-footer-bottom { border-top:1px solid rgba(255,255,255,.18); font-size:.78rem; display:flex; flex-wrap:wrap; gap:.5rem 2rem; justify-content:space-between; }
+
+/* Mobile agent navigation: a compact anchored flyout, not a full-screen
+   legacy sidebar with an empty 100vh sticky scroll container. */
+@media (max-width: 767.98px) {
+  body.show_sidebar #sidebarMenu.sidebar {
+    position: fixed;
+    top: 48px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    z-index: 1025;
+    width: 100%;
+    max-height: calc(100vh - 48px);
+    padding: .35rem 0 .85rem;
+    overflow-y: auto;
+    border-bottom: 1px solid #d8e4dc;
+    box-shadow: 0 14px 32px rgba(18, 42, 29, .15);
+  }
+
+  body.show_sidebar #sidebarMenu .sidebar-sticky {
+    position: static;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding-top: .15rem;
+  }
+}

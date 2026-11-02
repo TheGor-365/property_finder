@@ -13,7 +13,8 @@ fs.mkdirSync(output, { recursive: true });
 const errors = [];
 const screenshots = [];
 const capture = async (page, filename) => {
-  await page.screenshot({ path: path.join(output, filename), fullPage: true });
+  const viewportOnly = /^(01-|03-|04-mobile-enquiry-validation|05-)/.test(filename);
+  await page.screenshot({ path: path.join(output, filename), fullPage: !viewportOnly });
   screenshots.push(filename);
 };
 const goto = async (page, route) => {
@@ -68,7 +69,8 @@ const checkNoOverflow = async (page, label) => {
     await goto(page, `/properties/${credentials.property_id}`);
     await checkNoOverflow(page, "mobile detail");
     await page.getByRole("button", { name: "Contact listing agent" }).click();
-    await page.locator("#contact-modal").waitFor({ state: "visible" });
+    await page.locator("#contact-modal.show").waitFor({ state: "visible" });
+    await page.waitForTimeout(350); // Bootstrap modal fade transition
     await capture(page, "03-mobile-enquiry-modal.png");
     await page.locator('#contact-modal input[name="enquiry[name]"]').fill("Browser QA Visitor");
 
@@ -89,6 +91,7 @@ const checkNoOverflow = async (page, label) => {
     assert.equal(await page.locator('#contact-modal input[name="enquiry[email]"]').inputValue(),
       "not-an-email");
     assert.equal(await page.locator("#contact-modal .alert-danger").isVisible(), true);
+    await page.waitForTimeout(350); // Bootstrap modal fade transition
     await capture(page, "04-mobile-enquiry-validation.png");
 
     await page.locator('#contact-modal input[name="enquiry[email]"]').fill("browser-qa-visitor@example.invalid");
@@ -110,6 +113,14 @@ const checkNoOverflow = async (page, label) => {
     await page.locator("#sidebarMenu.show").waitFor({ state: "visible" });
     assert.equal(await page.locator("#sidebarMenu").getByRole("link",
       { name: "Enquiries" }).isVisible(), true);
+    const sidebarSize = await page.locator("#sidebarMenu").evaluate(element => {
+      const r = element.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, height: r.height };
+    });
+    assert.ok(sidebarSize.height >= 180 && sidebarSize.height <= 520,
+      `Mobile sidebar has excessive height: ${JSON.stringify(sidebarSize)}`);
+    assert.ok(sidebarSize.bottom < 844,
+      `Mobile sidebar unnecessarily fills the screen: ${JSON.stringify(sidebarSize)}`);
     await capture(page, "05-mobile-agent-workspace.png");
 
     await goto(page, "/enquiries");
@@ -145,6 +156,7 @@ const checkNoOverflow = async (page, label) => {
     console.log("SCREENSHOTS=" + screenshots.length);
     console.log("MOBILE_NAVBAR_GAP_PX=" + gap);
     console.log("MOBILE_NAV_EXPANDED_HEIGHT_PX=" + expandedNavHeight);
+    console.log("MOBILE_AGENT_SIDEBAR_HEIGHT_PX=" + sidebarSize.height);
     console.log("ENQUIRY_SERVER_VALIDATION_422=PASS");
     console.log("ENQUIRY_PERSISTENCE=PASS");
     console.log("AGENT_STATUS_RELOAD=PASS");
