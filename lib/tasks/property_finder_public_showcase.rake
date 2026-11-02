@@ -24,6 +24,25 @@ namespace :pf do
         )
       end
 
+      # A temporary owner-controlled viewing credential may be passed only via
+      # the Railway service environment, never as seed data or in Git.
+      # Replacing the variable with a fresh unknown random value later revokes
+      # old temporary access without deleting demo data or enquiries.
+      temporary_password = ENV["PF_PUBLIC_DEMO_AGENT_PASSWORD"].to_s
+      if temporary_password.present?
+        abort "STOP: unsafe demo password length" if temporary_password.length < 32
+        abort "STOP: unexpected demo identity" unless agent.email ==
+          "pf-public-showcase@example.invalid" &&
+          agent.first_name == "Demo" && agent.last_name == "Agent"
+        unless agent.valid_password?(temporary_password)
+          agent.update!(
+            password: temporary_password,
+            password_confirmation: temporary_password
+          )
+        end
+        puts "PUBLIC_SHOWCASE_AGENT_ACCESS_CONFIGURED=YES"
+      end
+
       examples = [
         ["DEMO - City View Loft", "61 Sample Avenue, Example City", 285000, true, 2, 1, 1],
         ["DEMO - Modern Studio", "8 Model Street, Testborough", 149000, true, 1, 1, 0],
