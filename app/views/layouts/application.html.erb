@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Property Finder</title>
+    <title><%= pf_page_title %></title>
+    <meta name="description" content="<%= pf_page_description %>">
+    <% if pf_private_page? %>
+      <meta name="robots" content="noindex,nofollow">
+    <% end %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
