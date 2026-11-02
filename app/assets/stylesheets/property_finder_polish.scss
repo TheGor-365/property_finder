@@ -81,3 +81,38 @@
   .pf-catalog-filters { padding: 1rem !important; }
   .pf-filter-actions .btn { flex: 1; }
 }
+
+/* Property Finder property detail — same light/dark/green design as catalogue. */
+.pf-property-detail { min-height: calc(100vh - 160px); color: #162322; }
+.pf-property-detail .breadcrumb { font-size: .875rem; }
+.pf-property-detail .breadcrumb a { color: #31754b; }
+.pf-detail-title { font-size: clamp(1.85rem, 3vw, 2.6rem); font-weight: 700; letter-spacing: -.03em; }
+.pf-detail-price { font-size: 1.75rem; font-weight: 700; letter-spacing: -.025em; }
+.pf-detail-price-period { font-size: .875rem; font-weight: 400; color: #6a7a79; }
+.pf-detail-status { display: inline-block; padding: .36rem .72rem; border-radius: 6px; font-size: .8rem; font-weight: 700; color: #236f42; border: 1px solid #bfe1c9; background: #f1faf3; }
+.pf-detail-status-closed { background: #f4f5f6; color: #4e5b60; border-color: #d9dddf; }
+.pf-detail-cover { overflow: hidden; position: relative; background: #e8efea; border-radius: 12px; border: 1px solid #e0e9e4; }
+.pf-detail-cover-img { display: block; width: 100%; height: 420px; object-fit: cover; }
+.pf-detail-cover-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: .55rem 1rem; font-size: .8rem; color: #425652; background: rgba(245, 249, 246, .92); }
+.pf-detail-panel, .pf-detail-agent-card { border-radius: 12px; border: 1px solid #e2ece5; background: #fff; padding: 1.5rem; }
+.pf-detail-panel h2, .pf-detail-agent-card h2 { font-weight: 700; letter-spacing: -.02em; }
+.pf-detail-highlights > div { text-align: center; border-right: 1px solid #e6eee9; }
+.pf-detail-highlights > div:last-child { border: none; }
+.pf-detail-highlights i { display: block; font-size: 1.1rem; margin-bottom: .65rem; }
+.pf-detail-highlights strong { display: block; font-size: 1.25rem; }
+.pf-detail-highlights span { display: block; color: #647775; font-size: .8rem; }
+.pf-detail-availability { padding-top: 1rem; border-top: 1px solid #e6eee9; color: #4b625c; }
+.pf-detail-description { color: #394c49; line-height: 1.75; overflow-wrap: anywhere; }
+.pf-detail-description p:last-child { margin-bottom: 0; }
+.pf-detail-agent-card { background: #f7faf8; }
+.pf-detail-agent-name { font-size: 1.1rem; font-weight: 700; }
+.pf-detail-profile-link { color: #237a4a; font-weight: 600; }
+.pf-detail-note { padding: 1rem; border-left: 3px solid #58a670; background: #f7faf8; font-size: .8rem; color: #637772; line-height: 1.55; }
+.pf-detail-related { border-top: 1px solid #e4ebe7; padding-top: 2rem; }
+@media (max-width: 767.98px) {
+  .pf-detail-cover-img { height: 270px; }
+  .pf-detail-panel, .pf-detail-agent-card { padding: 1.1rem; }
+  .pf-detail-title { font-size: 1.85rem; }
+  .pf-detail-price { font-size: 1.5rem; }
+}
+@media (max-width: 390px) { .pf-detail-cover-img { height: 215px; } }

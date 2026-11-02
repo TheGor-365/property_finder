@@ -1,0 +1,106 @@
+<% agent = @property.account %>
+<% available = @property.status.to_s == 'available' %>
+<% listing_kind = @property.for_sale? ? 'For sale' : 'For rent' %>
+<% status_title = available ? listing_kind : (@property.status.to_s == 'sold' ? 'Sold' : @property.status.to_s == 'leased' ? 'Leased' : 'Unavailable') %>
+<% hero_photo = @property.photo.present? ? @property.photo.url : asset_path('placeholder.png') %>
+<% price_label = @property.price.to_i.positive? ? number_to_currency(@property.price, precision: 0) : 'Price on request' %>
+
+<main class="pf-property-detail pb-5" id="property-detail">
+  <div class="container">
+    <nav aria-label="Breadcrumb" class="pf-detail-breadcrumb pt-4 pb-3">
+      <ol class="breadcrumb bg-transparent p-0 mb-0">
+        <li class="breadcrumb-item"><%= link_to 'Home', root_path %></li>
+        <li class="breadcrumb-item"><%= link_to 'Properties', properties_path %></li>
+        <li class="breadcrumb-item active" aria-current="page"><%= @property.name.presence || 'Property details' %></li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-start mb-4">
+      <div class="col-lg-8">
+        <p class="pf-section-kicker mb-2">Property details</p>
+        <h1 class="pf-detail-title mb-2"><%= @property.name.presence || 'Property listing' %></h1>
+        <p class="text-muted mb-3"><i class="fas fa-map-marker-alt mr-2" aria-hidden="true"></i><%= @property.address.presence || 'Address not provided' %></p>
+      </div>
+      <div class="col-lg-4 text-lg-right">
+        <span class="pf-detail-status<%= ' pf-detail-status-closed' unless available %>"><%= status_title %></span>
+        <p class="pf-detail-price mt-2 mb-0"><%= price_label %><% unless @property.for_sale? || @property.price.to_i <= 0 %><span class="pf-detail-price-period"> / month</span><% end %></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8 mb-4">
+        <figure class="pf-detail-cover mb-4">
+          <%= image_tag hero_photo, alt: "Photo of #{@property.name.presence || 'property'}", class: 'pf-detail-cover-img', loading: 'eager' %>
+          <% unless @property.photo.present? %>
+            <figcaption class="pf-detail-cover-caption">Property photo not yet provided</figcaption>
+          <% end %>
+        </figure>
+
+        <section class="pf-detail-panel mb-4" aria-labelledby="property-highlights-title">
+          <h2 class="h4 mb-4" id="property-highlights-title">At a glance</h2>
+          <div class="row pf-detail-highlights">
+            <div class="col-4">
+              <i class="fas fa-bed text-success" aria-hidden="true"></i>
+              <strong><%= @property.rooms || '—' %></strong>
+              <span>Bedrooms</span>
+            </div>
+            <div class="col-4">
+              <i class="fas fa-bath text-success" aria-hidden="true"></i>
+              <strong><%= @property.bathrooms || '—' %></strong>
+              <span>Bathrooms</span>
+            </div>
+            <div class="col-4">
+              <i class="fas fa-car text-success" aria-hidden="true"></i>
+              <strong><%= @property.parking_spaces || 0 %></strong>
+              <span>Parking</span>
+            </div>
+          </div>
+          <% if !@property.for_sale? && @property.available_date.present? %>
+            <p class="pf-detail-availability mt-4 mb-0">Available from <strong><%= l(@property.available_date.to_date, format: :long) %></strong></p>
+          <% end %>
+        </section>
+
+        <section class="pf-detail-panel" aria-labelledby="property-description-title">
+          <h2 class="h4 mb-3" id="property-description-title">About this property</h2>
+          <% if @property.details.present? %>
+            <div class="pf-detail-description"><%= simple_format(@property.details) %></div>
+          <% else %>
+            <p class="text-muted mb-0">A detailed description has not been provided yet.</p>
+          <% end %>
+        </section>
+      </div>
+
+      <aside class="col-lg-4" aria-labelledby="listing-agent-title">
+        <div class="pf-detail-agent-card">
+          <p class="pf-section-kicker mb-2">Your contact</p>
+          <h2 class="h4 mb-2" id="listing-agent-title">Listing agent</h2>
+          <p class="pf-detail-agent-name mb-1"><%= agent&.full_name.presence || 'Property agent' %></p>
+          <% if agent&.company.present? %><p class="text-muted mb-3"><%= agent.company %></p><% end %>
+          <% if agent %>
+            <p class="mb-3"><%= link_to 'View agent profile', profile_path(agent), class: 'pf-detail-profile-link' %></p>
+          <% end %>
+          <% if available && agent %>
+            <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#contact-modal">Contact listing agent</button>
+            <p class="text-muted small mt-3 mb-0">Use the form to send an enquiry to the listed agent.</p>
+          <% else %>
+            <p class="text-muted mb-0">This listing is not currently accepting enquiries.</p>
+          <% end %>
+        </div>
+        <div class="pf-detail-note mt-3">Listing information is provided by the agent. Verify details before making decisions.</div>
+      </aside>
+    </div>
+
+    <% if @related_properties.present? %>
+      <section class="pf-detail-related mt-4" aria-labelledby="more-agent-properties-title">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+          <h2 class="h4 mb-2" id="more-agent-properties-title">More from this agent</h2>
+          <%= link_to 'Browse all properties', properties_path, class: 'btn btn-outline-success btn-sm mb-2' %>
+        </div>
+        <div class="row pf-catalog-results"><%= render 'properties/list', properties: @related_properties %></div>
+      </section>
+    <% end %>
+  </div>
+</main>
+<% if available && agent %>
+  <%= render 'properties/detail_enquiry_modal', agent: agent %>
+<% end %>

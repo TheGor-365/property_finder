@@ -35,13 +35,16 @@ class PropertyCatalogTest < ActionDispatch::IntegrationTest
   end
 
   test "pagination preserves query parameters and sorts by price" do
-    10.times { |i| create_property("Apartment #{i}", "Market Lane", 100_000 + i, 2, true) }
-    get properties_path, params: { transaction: "sale", sort: "price_desc" }
+    # Unique per run: preview/demo records already in the test DB must not affect counts.
+    marker = "PF-Pagination-#{SecureRandom.hex(12)}"
+    11.times { |i| create_property("#{marker} Apartment #{i}", "Market Lane", 100_000 + i, 2, true) }
+    get properties_path, params: { q: marker, transaction: "sale", sort: "price_desc" }
     assert_response :success
     assert_select 'nav[aria-label="Property results pagination"] a[rel="next"]', 1
     assert_select '.pf-catalog-results .pf-property-card', count: 9
     assert_match(/transaction=sale/, response.body)
-    get properties_path, params: { transaction: "sale", sort: "price_asc", page: "2" }
+    assert_match(/q=PF-Pagination-/, response.body)
+    get properties_path, params: { q: marker, transaction: "sale", sort: "price_asc", page: "2" }
     assert_response :success
     assert_select '.pf-catalog-results .pf-property-card', count: 2
   end

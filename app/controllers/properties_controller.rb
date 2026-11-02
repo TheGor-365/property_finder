@@ -23,6 +23,11 @@ class PropertiesController < ApplicationController
   # GET /properties/1
   # GET /properties/1.json
   def show
+    if request.format.html?
+      @related_properties = Property.where(account_id: @property.account_id, status: "available")
+        .where.not(id: @property.id).order(created_at: :desc).limit(3)
+      return render :detail
+    end
     @agent = @property.account
     @agent_properties = Property.where(account_id: @agent.id).where.not(id: @property.id)
   end
