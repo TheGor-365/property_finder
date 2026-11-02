@@ -1,0 +1,62 @@
+name: Rails QA
+
+on:
+  pull_request:
+    branches:
+      - master
+      - work/property-finder-upgrade-lab
+  push:
+    branches:
+      - work/property-finder-ui-content
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      RAILS_ENV: test
+      PF_DEV_DB_PASSWORD: ci-property-finder-only
+      RAILS_MAX_THREADS: "5"
+      BUNDLE_WITHOUT: development
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: property_finder_test
+          POSTGRES_USER: first
+          POSTGRES_PASSWORD: ci-property-finder-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U first -d property_finder_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 8
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: System libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libpq-dev imagemagick
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4.12"
+          bundler: "2.6.9"
+          bundler-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+      - name: Install JS dependencies
+        run: |
+          npm install --global yarn@1.22.22
+          yarn install --frozen-lockfile
+      - name: Prepare isolated test database
+        run: bundle exec rails db:prepare
+      - name: Rails integration and unit tests
+        run: bundle exec rails test test
+      - name: Precompile assets
+        run: bundle exec rails assets:precompile
