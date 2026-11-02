@@ -1,6 +1,10 @@
 # Property Finder — отдельный Railway production deployment
 
-Статус: **build/test preparation, не deploy**. Отдельный приватный Railway-проект `property-finder` создан (project ID `367956af-bb83-4a01-b093-f7342ca58a4a`, production environment `3bbabef4-5625-43b0-9796-1e03c4363ae7`). В нём пока 0 работающих сервисов и 0 томов. Не трогать `mellow-stillness`, `gor-web-resume`, `classifieds-rails-project-65` и их базы/тома.
+**АКТУАЛЬНО НА 03.11.2026: LIVE DEPLOY.** Документ ниже изначально был предрелизным чек-листом; указания про «0 работающих сервисов», staged-состояние и отсутствие публичного домена — исторические, не текущая действительность. Railway web+Postgres `SUCCESS`, `/healthz` HTTP 200, production deploy `61bbee63-e492-4ac1-852a-0c49d6e36b14` / commit `7b290310623feff47050c3bd808fe6504115cbd1`. [Публичное DEMO](https://property-finder-web-production.up.railway.app/). SMTP выключен намеренно, домен Railway (не куплен пользовательский), тома подключены; backup/restore и upload persistence не доказаны. История ниже оставлена для технической трассировки.
+
+---
+
+**ИСТОРИЧЕСКИЙ ПЛАН (до публикации):** Отдельный приватный Railway-проект `property-finder` создан (project ID `367956af-bb83-4a01-b093-f7342ca58a4a`, production environment `3bbabef4-5625-43b0-9796-1e03c4363ae7`). В нём пока 0 работающих сервисов и 0 томов. Не трогать `mellow-stillness`, `gor-web-resume`, `classifieds-rails-project-65` и их базы/тома.
 
 ## Входные условия
 - Отдельный Railway project **property-finder** и свой PostgreSQL instance. Никаких общих production DB с другими приложениями.
