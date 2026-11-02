@@ -56,8 +56,10 @@ jobs:
           yarn install --frozen-lockfile
       - name: Prepare isolated test database
         run: bundle exec rails db:prepare
-      - name: Rails integration and unit tests
-        run: bundle exec rails test test
+      - name: Rails integration and unit tests (random and regression seed)
+        run: |
+          bundle exec rails test test
+          bundle exec rails test test --seed 34035
       - name: Demo content creation is safe and idempotent
         run: |
           first="$(bundle exec rails pf:demo:articles)"
