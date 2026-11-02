@@ -1,6 +1,7 @@
 require "test_helper"
 
 class PublicNavigationLayoutTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   setup do
     @agent = Account.create!(
       email: "nav-layout-#{SecureRandom.hex(5)}@example.test",
