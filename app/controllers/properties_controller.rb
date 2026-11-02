@@ -13,7 +13,8 @@ class PropertiesController < ApplicationController
       @properties = @catalog.records
       return render :catalog
     end
-    @properties = Property.order(created_at: :desc)
+    # JSON is public too: use the same availability policy as the HTML catalogue.
+    @properties = Property.where(status: "available").order(created_at: :desc)
   end
 
   def mine
