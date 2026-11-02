@@ -82,6 +82,6 @@ jobs:
       - name: Missing production configuration must refuse startup
         run: |
           result=0
-          docker run --rm property-finder:release-check 2>&1 > /tmp/pf-release-guard.log || result=$?
+          docker run --rm property-finder:release-check > /tmp/pf-release-guard.log 2>&1 || result=$?
           test "$result" -eq 78
           grep -q 'STARTUP_BLOCKED: missing required variable DATABASE_URL' /tmp/pf-release-guard.log
