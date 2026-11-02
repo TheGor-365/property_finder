@@ -13,6 +13,11 @@ class AgentProfileMessagesTest < ActionDispatch::IntegrationTest
     @data = { name: "Visitor Name", email: "Visitor@Example.test",
       message: "I would like to ask about your listed homes." }
     ActionMailer::Base.deliveries.clear
+    Rack::Attack.cache.store.clear
+  end
+
+  teardown do
+    Rack::Attack.cache.store.clear
   end
 
   test "public agent profile form persists and notifies the correct account" do
