@@ -3,6 +3,15 @@ module PropertiesHelper
     editorial/architecture.svg
     editorial/terrace.svg
     editorial/living-room.svg
+    editorial/courtyard.svg
+    editorial/apartment.svg
+    editorial/townhouse.svg
+    editorial/lakehouse.svg
+    editorial/studio.svg
+    editorial/garden.svg
+    editorial/penthouse.svg
+    editorial/brickhome.svg
+    editorial/modernhouse.svg
   ].freeze
 
   def property_thumbnail(property)
