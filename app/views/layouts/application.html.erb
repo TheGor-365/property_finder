@@ -19,11 +19,13 @@
     <% if @show_sidebar.nil? %>
       <header>
         <%= render 'layouts/nav/public' %>
+        <%= render 'layouts/flash' %>
         <%= yield %>
       </header>
     <% else %>
 
       <%= render 'layouts/nav/dashboard' %>
+      <%= render 'layouts/flash' %>
 
       <div class="container-fluid">
         <div class="row">
@@ -37,6 +39,6 @@
 
     <%#= render 'layouts/footer' %>
 
-    <div id="notifications"><%= flash_notifications %></div>
+
   </body>
 </html>

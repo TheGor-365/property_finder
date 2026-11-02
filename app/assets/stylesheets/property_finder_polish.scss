@@ -116,3 +116,6 @@
   .pf-detail-price { font-size: 1.5rem; }
 }
 @media (max-width: 390px) { .pf-detail-cover-img { height: 215px; } }
+/* Enquiry form: inaccessible to casual autofill bots, visible to keyboard users otherwise. */
+.pf-enquiry-honeypot { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+#agent-enquiries .pf-detail-panel { overflow-wrap: anywhere; }

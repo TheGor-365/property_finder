@@ -1,3 +1,5 @@
+<% enquiry = @enquiry || Enquiry.new(property: @property) %>
+<% invalid = enquiry.errors.any? %>
 <div class="modal fade" id="contact-modal" tabindex="-1" role="dialog" aria-labelledby="detail-contact-title" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -5,32 +7,47 @@
         <h2 class="h5 modal-title" id="detail-contact-title">Contact <%= agent.full_name.presence || 'listing agent' %></h2>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
-      <div class="modal-body">
-        <%= form_tag '/agent/message', id: 'email_agent' do %>
-          <%= hidden_field_tag :agent_id, agent.id %>
+      <%= form_with model: enquiry, url: enquiries_path, local: true, html: { id: 'email_agent' } do |form| %>
+        <div class="modal-body">
+          <%= form.hidden_field :property_id, value: @property.id %>
+          <% if invalid %>
+            <div class="alert alert-danger" role="alert">
+              <strong>Check your enquiry:</strong>
+              <ul class="mb-0"><% enquiry.errors.full_messages.each do |error| %><li><%= error %></li><% end %></ul>
+            </div>
+          <% end %>
           <div class="form-group">
-            <%= label_tag 'message-first-name', 'First name' %>
-            <%= text_field_tag :first_name, nil, id: 'message-first-name', class: 'form-control', required: true, maxlength: 80, autocomplete: 'given-name' %>
+            <%= form.label :name, 'Your name', for: 'message-first-name' %>
+            <%= form.text_field :name, id: 'message-first-name', class: 'form-control', required: true, maxlength: 120, autocomplete: 'name' %>
           </div>
           <div class="form-group">
-            <%= label_tag 'message-last-name', 'Last name' %>
-            <%= text_field_tag :last_name, nil, id: 'message-last-name', class: 'form-control', required: true, maxlength: 80, autocomplete: 'family-name' %>
+            <%= form.label :email, 'Email address', for: 'message-email' %>
+            <%= form.email_field :email, id: 'message-email', class: 'form-control', required: true, maxlength: 254, autocomplete: 'email' %>
           </div>
           <div class="form-group">
-            <%= label_tag 'message-email', 'Email address' %>
-            <%= email_field_tag :email, nil, id: 'message-email', class: 'form-control', required: true, maxlength: 254, autocomplete: 'email' %>
+            <%= form.label :message, 'Your message', for: 'message-text' %>
+            <%= form.text_area :message, id: 'message-text', class: 'form-control', required: true, rows: 4, minlength: 10, maxlength: 2000 %>
           </div>
-          <div class="form-group">
-            <%= label_tag 'message-text', 'Your message' %>
-            <%= text_area_tag :message, nil, id: 'message-text', class: 'form-control', required: true, rows: 4, maxlength: 2000 %>
+          <div class="pf-enquiry-honeypot" aria-hidden="true">
+            <%= form.label :website, 'Leave this field empty' %>
+            <%= text_field_tag 'enquiry[website]', '', tabindex: -1, autocomplete: 'off' %>
           </div>
-        <% end %>
-        <p class="text-muted small mb-0" role="note">Ask the agent a question about this property.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" id="send-message-to-agent">Send enquiry</button>
-      </div>
+          <p class="text-muted small mb-0">Your contact details and message will be shared with the listing agent.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+          <%= form.submit 'Send enquiry', class: 'btn btn-success' %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
+<% if invalid %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.jQuery && window.jQuery.fn.modal) {
+        window.jQuery('#contact-modal').modal('show');
+      }
+    });
+  </script>
+<% end %>

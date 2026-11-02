@@ -1,0 +1,9 @@
+<div id="flash-messages" class="container mt-3" aria-live="polite">
+  <% %w[notice alert].each do |kind| %>
+    <% message = flash[kind] %>
+    <% next if message.blank? %>
+    <div class="alert <%= kind == "notice" ? "alert-success" : "alert-danger" %>" role="alert">
+      <%= message %>
+    </div>
+  <% end %>
+</div>

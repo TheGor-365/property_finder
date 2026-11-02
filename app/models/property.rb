@@ -1,6 +1,7 @@
 class Property < ApplicationRecord
   mount_uploader :photo, PhotoUploader
   belongs_to :account
+  has_many :enquiries, dependent: :restrict_with_error
 
   validates :name, presence: true, length: { maximum: 150 }
   validates :address, presence: true, length: { maximum: 255 }
