@@ -4,9 +4,10 @@
     <article class="card pf-property-card h-100">
       <%= link_to property_path(property), class: 'pf-property-card-media' do %>
         <%= image_tag property_thumbnail_url(property), class: 'card-img-top pf-property-card-image',
-            alt: "Photo of #{property_title}", loading: 'lazy' %>
+            alt: (property.photo.present? ? "Photo of #{property_title}" : "Architectural illustration for #{property_title}"), loading: 'lazy' %>
       <% end %>
       <div class="card-body d-flex flex-column">
+        <% unless property.photo.present? %><span class="pf-illustration-note mb-2">Illustrative artwork · not a property photograph</span><% end %>
         <div class="d-flex align-items-center justify-content-between mb-2">
           <span class="badge badge-light border"><%= property.for_sale? ? 'For sale' : 'For rent' %></span>
           <% if property.status.present? && property.status != 'available' %>

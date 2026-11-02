@@ -2,7 +2,7 @@
 <% available = @property.status.to_s == 'available' %>
 <% listing_kind = @property.for_sale? ? 'For sale' : 'For rent' %>
 <% status_title = available ? listing_kind : (@property.status.to_s == 'sold' ? 'Sold' : @property.status.to_s == 'leased' ? 'Leased' : 'Unavailable') %>
-<% hero_photo = @property.photo.present? ? @property.photo.url : asset_path('placeholder.png') %>
+<% hero_photo = property_photo_url(@property) %>
 <% price_label = @property.price.to_i.positive? ? number_to_currency(@property.price, precision: 0) : 'Price on request' %>
 
 <main class="pf-property-detail pb-5" id="property-detail">
@@ -30,9 +30,9 @@
     <div class="row">
       <div class="col-lg-8 mb-4">
         <figure class="pf-detail-cover mb-4">
-          <%= image_tag hero_photo, alt: "Photo of #{@property.name.presence || 'property'}", class: 'pf-detail-cover-img', loading: 'eager' %>
+          <%= image_tag hero_photo, alt: (@property.photo.present? ? "Photo of #{@property.name.presence || 'property'}" : "Architectural illustration for #{@property.name.presence || 'property'}"), class: 'pf-detail-cover-img', loading: 'eager' %>
           <% unless @property.photo.present? %>
-            <figcaption class="pf-detail-cover-caption">Property photo not yet provided</figcaption>
+            <figcaption class="pf-detail-cover-caption">Illustration only — no verified property photograph has been provided</figcaption>
           <% end %>
         </figure>
 
