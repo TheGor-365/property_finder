@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "/healthz", to: "health#show", as: :healthz
+
 
   devise_for :accounts, controllers: { registrations: "accounts/registrations" }
   resources :posts

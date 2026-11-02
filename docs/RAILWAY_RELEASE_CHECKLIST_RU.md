@@ -22,6 +22,9 @@
 
 Entry point блокирует запуск при отсутствии обязательных переменных или writable volume. Rails в production: force SSL, info logs, фильтрация PII и SMTP с TLS verification.
 
+## Проверка здоровья
+`GET /healthz` отвечает HTTP 200 только если приложение способно выполнить `SELECT 1` в собственной базе. Railway healthcheck задан в `railway.json`, Dockerfile выбирается автоматически. HTTP 503 при недоступности БД — это отказ readiness, а не публичная выдача подробностей.
+
 ## Безопасный порядок выпуска
 1. Убедиться, что PR CI зелёный на точном SHA; проверить отсутствие актуальных секретов в Git history (исторический Google Maps key и пароль из старой конфигурации требуют проверки/ротации).
 2. Создать **отдельный** проект Property Finder; присоединить PostgreSQL и dedicated Volume, настроить secrets без вывода в чат. Задать source branch и root Dockerfile. Не подключать действующие базы другого проекта.
