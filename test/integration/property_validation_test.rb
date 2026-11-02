@@ -58,6 +58,7 @@ class PropertyValidationTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_select "#error_explanation"
+    assert_select '#error_explanation[role="alert"]', count: 1
     assert_includes CGI.unescapeHTML(response.body), "Name can't be blank"
     assert_select 'input[name="property[address]"][value="Test Street 1"]'
   end
@@ -70,6 +71,7 @@ class PropertyValidationTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_select "#error_explanation"
+    assert_select '#error_explanation[role="alert"]', count: 1
   end
 
 end

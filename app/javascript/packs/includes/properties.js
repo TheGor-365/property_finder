@@ -11,6 +11,12 @@ $(function(){
     $(this).text(details.hasClass('open') ? 'Show less' : 'Show more');
   });
 
+  // On 422, show preserved visitor inputs and validation errors without
+  // relying on inline scripts that may be blocked by Content Security Policy.
+  if ($('#contact-modal .alert-danger').length && $.fn.modal) {
+    $('#contact-modal').modal('show');
+  }
+
   // Synchronize completion status with the selected transaction type.
   var listingType = $('select[name="property[for_sale]"]');
   var listingStatus = $('select[name="property[status]"]');

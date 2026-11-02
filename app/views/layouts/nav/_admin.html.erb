@@ -1,18 +1,15 @@
 <li class="nav-item">
-  <%= link_to accounts_path, class: 'nav-link' do %>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-    Accounts <span class="sr-only">(current)</span>
+  <%= link_to accounts_path, class: "nav-link", aria: { current: (current_page?(accounts_path) ? "page" : nil) } do %>
+    <i data-feather="users" aria-hidden="true"></i> Accounts
   <% end %>
 </li>
 <li class="nav-item">
-  <%= link_to properties_path, class: 'nav-link' do %>
-    <i data-feather="package"></i>
-    Properties
+  <%= link_to properties_path, class: "nav-link", aria: { current: (current_page?(properties_path) ? "page" : nil) } do %>
+    <i data-feather="package" aria-hidden="true"></i> Properties
   <% end %>
 </li>
 <li class="nav-item">
-  <%= link_to posts_path, class: 'nav-link' do %>
-      <i data-feather="calendar"></i>
-      Blog Posts
+  <%= link_to posts_path, class: "nav-link", aria: { current: (controller_name == "posts" && action_name != "latest" ? "page" : nil) } do %>
+    <i data-feather="calendar" aria-hidden="true"></i> Blog Posts
   <% end %>
 </li>

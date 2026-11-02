@@ -46,6 +46,7 @@ class AgentProfileMessagesTest < ActionDispatch::IntegrationTest
     end
     assert_response :unprocessable_entity
     assert_select "#contact-modal .alert-danger", minimum: 1
+    assert_select "#contact-modal script", count: 0
     assert_select "input[name='agent_message[name]'][value='Visitor Name']", count: 1
     assert_select "input[name='agent_message[email]'][value='invalid']", count: 1
     assert_select "textarea[name='agent_message[message]']", text: "short"
