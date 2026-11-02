@@ -10,20 +10,20 @@ module PersistentUploadStorage
     mount = mount_path.to_s.strip
 
     unless mount.start_with?("/") && File.expand_path(mount) == uploads
-      raise CarrierWave::StorageError,
+      raise CarrierWave::IntegrityError,
         "Media upload unavailable: configure a persistent volume mounted exactly at #{uploads}"
     end
 
     writable = File.directory?(uploads) && File.writable?(uploads) if writable.nil?
     unless writable
-      raise CarrierWave::StorageError,
+      raise CarrierWave::IntegrityError,
         "Media upload unavailable: persistent uploads directory is not writable"
     end
 
     true
   end
 
-  def verify_persistent_upload_storage!
+  def verify_persistent_upload_storage!(_file = nil)
     return unless Rails.env.production?
 
     mount = ENV["RAILWAY_VOLUME_MOUNT_PATH"] ||
