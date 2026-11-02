@@ -58,5 +58,16 @@ jobs:
         run: bundle exec rails db:prepare
       - name: Rails integration and unit tests
         run: bundle exec rails test test
+      - name: Demo content creation is safe and idempotent
+        run: |
+          first="$(bundle exec rails pf:demo:articles)"
+          printf '%s\n' "$first"
+          printf '%s\n' "$first" | grep -q '^PF_DEMO_ARTICLES_CREATED=6
+
+          second="$(bundle exec rails pf:demo:articles)"
+          printf '%s\n' "$second"
+          printf '%s\n' "$second" | grep -q '^PF_DEMO_ARTICLES_CREATED=0
+
+          bundle exec rails runner 'abort "Expected 6 DEMO articles" unless Post.where("url LIKE ?", "pf-demo-%").count == 6'
       - name: Precompile assets
         run: bundle exec rails assets:precompile
