@@ -40,3 +40,13 @@ Entry point блокирует запуск при отсутствии обяз
 - Текущий volume guard проверяет переменную mount path и права записи, **не доказывает** долговечность volume — это доказывает только тест redeploy/restore.
 - Демонстрационные SVG не являются фотографиями реальных объектов. Нельзя публиковать их как реальные объявления.
 - Google Maps для вымышленных координат не активировать.
+
+
+## Public DEMO-only release without email (03.11.2026)
+
+The owner authorized a Railway public deploy, postponing only outbound SMTP.
+`PROPERTY_FINDER_EMAIL_DELIVERY=disabled` is explicit. Enquiries are stored, but **no emails are sent** (including Devise password recovery). Public portfolio records require `PF_PUBLIC_SHOWCASE=enabled` and the separate idempotent `pf:demo:public_showcase` rake task after schema preparation. The only seeded agent uses an `.invalid` example address and a random unknown password; no account credentials are embedded in source.
+
+The web service must have a writable persistent volume at `/app/public/uploads` and `RAILWAY_VOLUME_MOUNT_PATH` set to the same. `DATABASE_URL` must refer to its own Railway Postgres service, never localhost. Run pre-deploy database preparation and `pf:demo:public_showcase` against the **new empty production database only**. Public names, addresses, prices, articles and illustrations must be labelled fictitious; no photography of actual inventory is claimed.
+
+Before enabling email later: set `PROPERTY_FINDER_EMAIL_DELIVERY=smtp`, SMTP variables and verified sender/domain as a separate scoped change after end-to-end delivery testing. Until then the public demo's inbound messages have no notification delivery and should contain no personal or sensitive information.

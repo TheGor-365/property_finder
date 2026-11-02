@@ -2,8 +2,9 @@ namespace :pf do
   namespace :demo do
     desc "Add original educational Property Finder demo articles (test/development only)"
     task articles: :environment do
-      unless Rails.env.development? || Rails.env.test?
-        abort "Refusing to seed demonstration articles outside development/test."
+      unless Rails.env.development? || Rails.env.test? ||
+          (Rails.env.production? && ENV["PF_PUBLIC_SHOWCASE"] == "enabled")
+        abort "Refusing to seed demonstration articles outside authorized demo scope."
       end
 
       articles = [

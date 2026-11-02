@@ -2,13 +2,25 @@
 # Fail closed: never start a public application with missing credentials or
 # media on a disposable root filesystem. Never print secret values.
 set -eu
-for key in DATABASE_URL APP_HOST SECRET_KEY_BASE PROPERTY_FINDER_MAIL_FROM SMTP_ADDRESS SMTP_USERNAME SMTP_PASSWORD RAILWAY_VOLUME_MOUNT_PATH; do
+for key in DATABASE_URL SECRET_KEY_BASE RAILWAY_VOLUME_MOUNT_PATH; do
   eval "value=\${$key:-}"
   if [ -z "$value" ]; then
     printf 'STARTUP_BLOCKED: missing required variable %s\n' "$key" >&2
     exit 78
   fi
 done
+if [ "${PROPERTY_FINDER_EMAIL_DELIVERY:-disabled}" = "smtp" ]; then
+  for key in APP_HOST PROPERTY_FINDER_MAIL_FROM SMTP_ADDRESS SMTP_USERNAME SMTP_PASSWORD; do
+    eval "value=\${$key:-}"
+    if [ -z "$value" ]; then
+      printf 'STARTUP_BLOCKED: missing required mail variable %s\n' "$key" >&2
+      exit 78
+    fi
+  done
+elif [ "${PROPERTY_FINDER_EMAIL_DELIVERY:-disabled}" != "disabled" ]; then
+  echo "STARTUP_BLOCKED: unsupported PROPERTY_FINDER_EMAIL_DELIVERY" >&2
+  exit 78
+fi
 if [ "$RAILWAY_VOLUME_MOUNT_PATH" != "/app/public/uploads" ]; then
   echo "STARTUP_BLOCKED: uploads volume must be mounted at /app/public/uploads" >&2
   exit 78

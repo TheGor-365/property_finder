@@ -60,23 +60,33 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "property_finder_production"
 
   config.action_mailer.perform_caching = false
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: ENV["SMTP_ADDRESS"],
-    port: ENV.fetch("SMTP_PORT", "587").to_i,
-    domain: ENV["APP_HOST"],
-    user_name: ENV["SMTP_USERNAME"],
-    password: ENV["SMTP_PASSWORD"],
-    authentication: :plain,
-    enable_starttls_auto: true,
-    openssl_verify_mode: "peer"
-  }
+  # Public portfolio release can run without SMTP. Disabled means no email
+  # is delivered, including password reset emails. Enquiries remain durable.
+  mail_mode = ENV.fetch("PROPERTY_FINDER_EMAIL_DELIVERY", "disabled")
+  if mail_mode == "smtp"
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: ENV["SMTP_ADDRESS"],
+      port: ENV.fetch("SMTP_PORT", "587").to_i,
+      domain: ENV["APP_HOST"],
+      user_name: ENV["SMTP_USERNAME"],
+      password: ENV["SMTP_PASSWORD"],
+      authentication: :plain,
+      enable_starttls_auto: true,
+      openssl_verify_mode: "peer"
+    }
+  else
+    config.action_mailer.perform_deliveries = false
+    config.action_mailer.raise_delivery_errors = false
+    config.action_mailer.delivery_method = :test
+  end
 
   # Public domain used for password reset links.
   # APP_HOST must contain a hostname, without https:// or a path.
   config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST"),
+    host: ENV.fetch("APP_HOST", "localhost"),
     protocol: "https"
   }
 
