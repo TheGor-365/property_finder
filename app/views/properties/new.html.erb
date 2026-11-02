@@ -1,5 +1,7 @@
-<h1 class="h3">New Property</h1>
-
-<%= render 'form', property: @property %>
-
-<%= link_to 'Back', properties_path %>
+<div class="pf-editor-shell">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div><p class="pf-section-kicker mb-2">Agent workspace</p><h1 class="h2 mb-1">Create a listing</h1><p class="text-muted mb-0">Add an accurate listing with clear details and permitted imagery.</p></div>
+    <%= link_to 'My properties', my_properties_path, class: 'btn btn-outline-success mt-2' %>
+  </div>
+  <%= render 'form', property: @property %>
+</div>

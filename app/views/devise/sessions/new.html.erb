@@ -1,21 +1,25 @@
-<section class="form-auth text-center">
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
-
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <%= f.email_field :email, autofocus: true, class: 'form-control', id: 'inputEmail', placeholder: 'Email address' %>
-
-    <label for="inputPassword" class="sr-only">Password</label>
-    <%= f.password_field :password, autocomplete: "current-password", placeholder: 'Password', class: 'form-control', id: 'inputPassword' %>
-
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-  <% end %>
-
-  <%= render "devise/shared/links" %>
-</section>
+<main class="pf-auth-page" role="main">
+  <section class="pf-auth-card" aria-labelledby="auth-title">
+    <p class="pf-section-kicker mb-2">Welcome back</p>
+    <h1 class="h2 mb-2" id="auth-title">Sign in to your workspace</h1>
+    <p class="text-muted mb-4">Manage your listings and incoming enquiries.</p>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-group">
+        <%= f.label :email, 'Email address' %>
+        <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'form-control', required: true %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password, autocomplete: 'current-password', class: 'form-control', required: true %>
+      </div>
+      <% if devise_mapping.rememberable? %>
+        <div class="form-check mb-4">
+          <%= f.check_box :remember_me, class: 'form-check-input' %>
+          <%= f.label :remember_me, 'Remember me', class: 'form-check-label' %>
+        </div>
+      <% end %>
+      <%= f.submit 'Sign in', class: 'btn btn-success btn-lg btn-block' %>
+    <% end %>
+    <div class="mt-4 text-center"><%= render 'devise/shared/links' %></div>
+  </section>
+</main>

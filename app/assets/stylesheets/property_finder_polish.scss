@@ -119,3 +119,46 @@
 /* Enquiry form: inaccessible to casual autofill bots, visible to keyboard users otherwise. */
 .pf-enquiry-honeypot { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 #agent-enquiries .pf-detail-panel { overflow-wrap: anywhere; }
+
+/* Shared workspace surfaces: authored layouts instead of unbounded Bootstrap forms. */
+body.show_sidebar { background: #f6f8f6; }
+.pf-workspace-main { min-height: calc(100vh - 58px); }
+.pf-workspace-main h1, .pf-workspace-main h2 { letter-spacing: -.025em; }
+.pf-workspace-main .card { border: 1px solid #e1ebe4; border-radius: 14px; box-shadow: 0 5px 22px rgba(14,47,34,.04); }
+.pf-workspace-notice, .pf-workspace-card { background: #fff; border: 1px solid #dfebe2; border-radius: 14px; }
+.pf-workspace-notice { gap: .65rem; border-left: 4px solid #28a745; }
+.pf-workspace-card { padding: 1.5rem; }
+.pf-editor-shell { max-width: 1100px; margin: 0 auto; }
+.pf-editor-shell .form-control { min-height: 44px; border-color: #ceded3; }
+.pf-editor-shell textarea.form-control { min-height: 145px; resize: vertical; }
+.pf-editor-shell .form-control:focus { border-color: #289754; box-shadow: 0 0 0 .18rem rgba(40,167,69,.14); }
+.pf-editor-shell .pf-editor-side { position: sticky; top: 5rem; }
+.pf-editor-shell .pf-field-help { font-size: .84rem; color: #647773; }
+.pf-editor-shell .pf-editor-divider { border-bottom: 1px solid #e5ede7; padding-bottom: .8rem; margin-bottom: 1.2rem; }
+.pf-editor-shell .form-group label { font-weight: 600; color: #29483a; }
+.pf-editor-shell .custom-file-label { font-weight: 400; }
+.pf-auth-page { min-height: calc(100vh - 130px); background: linear-gradient(140deg,#f0f7f1,#fafcf9); padding: 4rem 1rem; }
+.pf-auth-card { max-width: 470px; margin: 0 auto; border: 1px solid #dbe9de; border-radius: 18px; background: #fff; padding: 2rem; box-shadow: 0 24px 65px rgba(22,62,44,.08); }
+.pf-auth-card .form-control { min-height: 46px; border-radius: 9px; border: 1px solid #cadbd1; }
+.pf-auth-card .form-group label { font-weight: 600; font-size: .9rem; }
+.pf-auth-card .btn { border-radius: 9px; }
+.pf-auth-card a { color: #247e4e; }
+.pf-blog-hero { background: #f3f8f5; border-bottom: 1px solid #e1ebe5; }
+.pf-blog-hero h1 { font-size: clamp(2.25rem,4vw,3.6rem); letter-spacing: -.04em; color:#153c2a; }
+.pf-blog-hero .lead { max-width: 620px; color: #506c5c; }
+.pf-blog-hero-art { border-radius: 18px; box-shadow: 0 18px 45px rgba(27,65,42,.12); width: 100%; }
+.pf-article-page { background: #fff; }
+.pf-article-heading,.pf-article-reading { max-width: 780px; }
+.pf-article-heading h1 { font-size: clamp(2.15rem,4vw,3.6rem); letter-spacing: -.045em; line-height: 1.12; }
+.pf-article-cover { border-radius: 16px; overflow: hidden; background: #e7f2e9; }
+.pf-article-cover img { display: block; width: 100%; max-height: 400px; object-fit: cover; }
+.pf-article-body { font-size: 1.1rem; line-height: 1.9; color: #344b41; }
+.pf-article-body p { margin-bottom: 1.6rem; }
+.pf-article-disclaimer { padding: 1rem; border-left: 3px solid #75af88; font-size: .85rem; color:#60776a; background:#f5f8f6; }
+.pf-property-card-media img[src$=".svg"] { background: #dce9e2; }
+@media (max-width:767.98px) {
+  .pf-workspace-card { padding: 1rem; }
+  .pf-editor-shell .pf-editor-side { position: static; }
+  .pf-auth-page { padding: 2rem 1rem; }
+  .pf-auth-card { padding: 1.4rem; }
+}
